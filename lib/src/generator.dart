@@ -980,7 +980,14 @@ Map<String, List> globalActionEn = {
 };
 
 List<String> russianLocales = [
-  'ru_RU',
+  'ru_ru',
+  'be_by',
+  'ru_by',
+  'ru_kg',
+  'ru_kz',
+  'ru_md',
+  'ru_ua',
+  'uk_ua',
 ];
 
 Map<String, List> globalConclusionEn = {
@@ -1064,6 +1071,7 @@ class MadNews {
 
   MadNews() {
     String locale = Platform.localeName;
+    print(locale);
     List<Map> predict = new List<Map>.from(globalPredict);
     Map<String, List> localActions = new Map<String, List>.from(globalAction);
     Map<String, List> localConclusion = new Map<String, List>.from(globalConclusion);
