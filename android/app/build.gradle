@@ -39,6 +39,15 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// add SDKs for any other desired Firebase products
+// https://firebase.google.com/docs/android/setup#available-libraries
+dependencies {
+    // add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    // Add the Firebase Crashlytics SDK.
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
+}
+
 android {
     compileOptions {
         sourceCompatibility 1.8
@@ -75,6 +84,9 @@ android {
                 minifyEnabled true
                 useProguard true
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                firebaseCrashlytics {
+                    nativeSymbolUploadEnabled true
+                }
             }
         }
     }

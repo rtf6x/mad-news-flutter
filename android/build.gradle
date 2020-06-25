@@ -12,8 +12,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.google.gms:google-services:4.3.3'  // Google Services plugin
         // Add the Crashlytics Gradle plugin.
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
-
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.1.1'
     }
 }
 

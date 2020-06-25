@@ -1,9 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'src/generator.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   runApp(VideoApp());
 }
 
