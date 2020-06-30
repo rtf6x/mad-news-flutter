@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,64 @@ class _VideoAppState extends State<VideoApp> {
     _controller.dispose();
   }
 
+  Widget MadContent(BuildContext context) {
+    double width = window.physicalSize.width;
+    return SizedBox(
+        width: width / 3,
+//        width: 300,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding:
+                  EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
+              child: Text(
+                '${this.person}',
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  backgroundColor: Colors.black87,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              child: Text(
+                  this.action,
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    decoration: TextDecoration.combine([
+
+                    ]),
+                    color: Colors.white,
+                    backgroundColor: Colors.black87,
+                  )
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+              child: Text(
+                '${this.conclusion}',
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  backgroundColor: Colors.black87,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -82,51 +141,7 @@ class _VideoAppState extends State<VideoApp> {
               FittedBox(
                 fit: BoxFit.fitHeight,
                 alignment: Alignment.bottomLeft,
-                child: SizedBox(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 40, bottom: 10, left: 20, right: 20),
-                        child: Text(
-                          '${this.person}',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            backgroundColor: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                        child: Text(
-                          '${this.action}',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            backgroundColor: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                        child: Text(
-                          '${this.conclusion}',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            backgroundColor: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: MadContent(context),
               ),
             ]),
           ),

@@ -978,14 +978,9 @@ Map<String, List> globalActionEn = {
 };
 
 List<String> russianLocales = [
-  'ru_ru',
-  'be_by',
-  'ru_by',
-  'ru_kg',
-  'ru_kz',
-  'ru_md',
-  'ru_ua',
-  'uk_ua',
+  'ru',
+  'be',
+  'uk',
 ];
 
 Map<String, List> globalConclusionEn = {
@@ -1068,8 +1063,8 @@ class MadNews {
   String conclusionString;
 
   MadNews() {
-    String locale = Platform.localeName;
-    print(locale);
+    String locale = Platform.localeName.substring(0, 2);
+    print('Locale: $locale');
     List<Map> predict = new List<Map>.from(globalPredict);
     Map<String, List> localActions = new Map<String, List>.from(globalAction);
     Map<String, List> localConclusion = new Map<String, List>.from(globalConclusion);
@@ -1111,7 +1106,7 @@ class MadNews {
   }
 
   String randomizeTemplate(template) {
-    String locale = Platform.localeName;
+    String locale = Platform.localeName.substring(0, 2);
     Map<String, List> localSets = new Map<String, List>.from(globalSets);
     if (russianLocales.indexOf(locale.toLowerCase()) == -1) {
       localSets = new Map<String, List>.from(globalSetsEn);
