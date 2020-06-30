@@ -25,9 +25,9 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     var madness = new MadNews();
-    this.person = madness.getPerson();
-    this.action = madness.getAction();
-    this.conclusion = madness.getConclusion();
+    this.person = madness.getPerson().trim();
+    this.action = madness.getAction().trim();
+    this.conclusion = madness.getConclusion().trim();
     super.initState();
     _controller = VideoPlayerController.asset("assets/shower.mp4")
       ..initialize().then((_) {
@@ -40,9 +40,9 @@ class _VideoAppState extends State<VideoApp> {
 
   void reloadMadness() {
     var madness = new MadNews();
-    this.person = madness.getPerson();
-    this.action = madness.getAction();
-    this.conclusion = madness.getConclusion();
+    this.person = madness.getPerson().trim();
+    this.action = madness.getAction().trim();
+    this.conclusion = madness.getConclusion().trim();
     setState(() {});
   }
 
