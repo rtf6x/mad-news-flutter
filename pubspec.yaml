@@ -1,5 +1,5 @@
 name: madnews
-version: 1.0.3
+version: 1.0.4
 
 environment:
   # The pub client defaults to an <2.0.0 sdk constraint which we need to explicitly overwrite.
