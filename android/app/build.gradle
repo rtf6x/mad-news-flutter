@@ -17,12 +17,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '6'
+    flutterVersionCode = '7'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.6'
+    flutterVersionName = '1.0.7'
 }
 
 apply plugin: 'com.android.application'
@@ -61,8 +61,8 @@ android {
     defaultConfig {
         applicationId "cc.rootfox.madnews"
         minSdkVersion 21
-        compileSdkVersion 29
-        targetSdkVersion 29
+        compileSdkVersion 30
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
