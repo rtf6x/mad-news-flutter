@@ -53,7 +53,7 @@ class _VideoAppState extends State<VideoApp> {
     _controller.dispose();
   }
 
-  Widget MadContent(BuildContext context) {
+  Widget madContent(BuildContext context) {
     double width = window.physicalSize.width;
     return SizedBox(
         width: width / 3,
@@ -141,7 +141,7 @@ class _VideoAppState extends State<VideoApp> {
               FittedBox(
                 fit: BoxFit.fitHeight,
                 alignment: Alignment.bottomLeft,
-                child: MadContent(context),
+                child: madContent(context),
               ),
             ]),
           ),
