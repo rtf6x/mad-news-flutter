@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1063228718385",
+    "firebase_url": "https://madnews-b53f9.firebaseio.com",
+    "project_id": "madnews-b53f9",
+    "storage_bucket": "madnews-b53f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063228718385:android:965e7286c8e48559a84410",
+        "android_client_info": {
+          "package_name": "cc.rootfox.madnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063228718385-tfs4oq7cjjdssgngb3ivr37tck4hrv5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGZ-IUALh2cMvffs8D_OH701Aw-oejWvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063228718385-tfs4oq7cjjdssgngb3ivr37tck4hrv5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
