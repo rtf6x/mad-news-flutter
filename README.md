@@ -18,4 +18,4 @@ Dramatic news generator
 `flutter update-packages --force-upgrade`
 
 ## Android App Version:
-`android/app/build.gradle`
+`pubspec.yaml`
