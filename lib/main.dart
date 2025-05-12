@@ -1,71 +1,68 @@
-import 'dart:ui';
-import 'package:flutter/foundation.dart';
-import 'package:video_player/video_player.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'src/generator.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() {
-  Crashlytics.instance.enableInDevMode = true;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
-  runApp(VideoApp());
+  runApp(_BaseLayout());
 }
 
-class VideoApp extends StatefulWidget {
+class _BaseLayout extends StatefulWidget{
   @override
-  _VideoAppState createState() => _VideoAppState();
+  _AppState createState() => _AppState();
 }
 
-class _VideoAppState extends State<VideoApp> {
-  VideoPlayerController _controller;
+class _AppState extends State<_BaseLayout> {
   String person = '';
   String action = '';
   String conclusion = '';
+  String asset = '';
+  List assets = [
+    'assets/bg.jpg',
+    'assets/bg2.jpg',
+    'assets/bg3.jpg',
+    'assets/bg4.jpg',
+    'assets/bg5.jpg',
+    'assets/bg6.jpg',
+  ];
 
   @override
   void initState() {
-    var madness = new MadNews();
-    this.person = madness.getPerson().trim();
-    this.action = madness.getAction().trim();
-    this.conclusion = madness.getConclusion().trim();
+    var madness = MadNews();
+    person = madness.getPerson().trim();
+    action = madness.getAction().trim();
+    conclusion = madness.getConclusion().trim();
+    asset = assets[Random().nextInt(assets.length)];
     super.initState();
-    _controller = VideoPlayerController.asset("assets/shower.mp4")
-      ..initialize().then((_) {
-        _controller.play();
-        _controller.setLooping(true);
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
   }
 
   void reloadMadness() {
-    var madness = new MadNews();
-    this.person = madness.getPerson().trim();
-    this.action = madness.getAction().trim();
-    this.conclusion = madness.getConclusion().trim();
+    var madness = MadNews();
+    person = madness.getPerson().trim();
+    action = madness.getAction().trim();
+    conclusion = madness.getConclusion().trim();
+    asset = assets[Random().nextInt(assets.length)];
     setState(() {});
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
   }
 
   Widget madContent(BuildContext context) {
-    double width = window.physicalSize.width;
+    final Size size = View.of(context).physicalSize;
+    final double width = size.width;
     return SizedBox(
         width: width / 3,
-//        width: 300,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
               padding:
-                  EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
+              EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
               child: Text(
-                '${this.person}',
+                person,
                 softWrap: true,
                 overflow: TextOverflow.visible,
                 style: TextStyle(
@@ -79,7 +76,7 @@ class _VideoAppState extends State<VideoApp> {
             Padding(
               padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
               child: Text(
-                  this.action,
+                  action,
                   softWrap: true,
                   overflow: TextOverflow.visible,
                   style: TextStyle(
@@ -96,7 +93,7 @@ class _VideoAppState extends State<VideoApp> {
             Padding(
               padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: Text(
-                '${this.conclusion}',
+                conclusion,
                 softWrap: true,
                 overflow: TextOverflow.visible,
                 style: TextStyle(
@@ -115,38 +112,29 @@ class _VideoAppState extends State<VideoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MadNews',
-      home: SafeArea(
-        child: Scaffold(
-          body: GestureDetector(
-            onTap: () {
-              this.reloadMadness();
-            },
-            child: Stack(children: <Widget>[
-              SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  alignment: Alignment.bottomLeft,
-                  child: SizedBox(
-                    width: _controller.value.size?.width ?? 0,
-                    height: _controller.value.size?.height ?? 0,
-                    child: _controller.value.initialized
-                        ? AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            child: VideoPlayer(_controller),
-                          )
-                        : Container(),
-                  ),
-                ),
+      home: Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            reloadMadness();
+          },
+          child: Container(
+            // constraints: BoxConstraints.expand(),
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              image: DecorationImage(
+                image: AssetImage(asset),
+                fit: BoxFit.cover,
               ),
-              FittedBox(
-                fit: BoxFit.fitHeight,
-                alignment: Alignment.bottomLeft,
-                child: madContent(context),
-              ),
-            ]),
+            ),
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.center,
+              child: madContent(context),
+            ),
           ),
         ),
-      ),
+      )
     );
   }
 }

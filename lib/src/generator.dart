@@ -1,6 +1,8 @@
 import 'dart:io';
 import "dart:math";
 
+import 'package:flutter/foundation.dart';
+
 List<Map> globalPredict = [
   {'message': '[ПЬЯНЫЙ] [МУЖЧИНА]', 'sex': 'm'},
   {'message': '[ПЬЯНАЯ] [ЖЕНЩИНА]', 'sex': 'f'},
@@ -39,6 +41,34 @@ List<Map> globalPredict = [
   {'message': '[ШКОЛЬНИЦА]', 'sex': 'f'},
   {'message': '[ОДНА_ПЛЮС_ОДНА]', 'sex': 'plural'},
   {'message': '[ДВА] студента [ВУЗА]', 'sex': 'plural'},
+];
+
+List<Map> globalPredictEn = [
+  {'message': '[TWO] students of [UNIVERSITY]', 'sex': 'plural'},
+  {'message': '[TWO] [DRUNK] prostitutes from [CITY]', 'sex': 'plural'},
+  {'message': '[DRUNK] [GIRL] from [CITY]', 'sex': 'f'},
+  {'message': '[DRUNK] citizen from [CITY]', 'sex': 'f'},
+  {'message': '[DRUNK] gay activists', 'sex': 'plural'},
+  {'message': '[DRUNK] [CONGRESSMAN] from [CITY]', 'sex': 'm'},
+  {'message': '[DRUNK] [OLDMAN] in [CITY]', 'sex': 'm'},
+  {'message': '[DRUNK] [OLDMAN] from [CITY]', 'sex': 'm'},
+  {'message': '[DRUNK] [OLDMAN] from [CITY]', 'sex': 'm'},
+  {'message': '[DRUNK] [OLDMAN]', 'sex': 'm'},
+  {'message': '[DRUNK] [CITIZEN]', 'sex': 'm'},
+  {'message': '[DRUNK] [CITIZEN] with a laser stick', 'sex': 'm'},
+  {'message': '[DRUNK] [CITIZENS]', 'sex': 'plural'},
+  {'message': 'In [CITY] [TWO] [DRUNK] [GIRLS]', 'sex': 'plural'},
+  {'message': 'In [CITY] [DRUNK] [GIRL]', 'sex': 'f'},
+  {'message': 'In [CITY] [DRUNK] [OLDMAN]', 'sex': 'm'},
+  {'message': 'In [CITY] [DRUNK] Mexican worker', 'sex': 'm'},
+  {'message': 'Group of young men from [CITY]', 'sex': 'plural'},
+  {'message': 'Some guys from [CITY]', 'sex': 'plural'},
+  {'message': 'citizens from [CITY]', 'sex': 'plural'},
+  {'message': '[ONE_PLUS_ONE]', 'sex': 'plural'},
+  {'message': 'Bigfoot in [CITY]', 'sex': 'bf'},
+  {'message': 'Bigfoot', 'sex': 'bf'},
+  {'message': 'gay aliens', 'sex': 'aliens'},
+  {'message': 'aliens', 'sex': 'aliens'},
 ];
 
 Map<String, List> globalSets = {
@@ -486,240 +516,6 @@ Map<String, List> globalSets = {
   ],
 };
 
-Map<String, List> globalAction = {
-  'm': [
-    '[ВЗОРВАЛ] [БУДКУ]',
-    'боролся с неприятным запахом в туалете',
-    'взял в заложницы тещу',
-    'вломился в чужой дом',
-    'выстрелил в сожительницу из ружья',
-    'выстрелил мужчине в глаз',
-    'готовил ужин',
-    'залез в дом пенсионерки',
-    'в порыве страсти зарезал собутыльницу',
-    'заготовил на зиму 3 кг марихуаны',
-    'записался на шугаринг',
-    'захватил сосны на участке соседей',
-    'зашел в строительную фирму',
-    'избил несовершеннолетнего',
-    'изнасиловал кондуктора',
-    'изнасиловал коллектора',
-    'купил аккордеон',
-    'напал на офис микрозаймов',
-    'напоил кота самогонкой',
-    'нашёл две гранаты',
-    'незаконно охотился на косуль',
-    'обесточил посёлок',
-    'ОБЛИЛСЯ БЕНЗИНОМ, ЗАГОРЕЛСЯ',
-    'обнаружил в подвале скелет',
-    'ограбил автомат с игрушками',
-    'ограбил супругов, приютивших его на ночь',
-    'отравился этанолом',
-    'ПОДЖЕГ СВОИ ДОКУМЕНТЫ',
-    'поджёг не ту аптеку',
-    'подорвался на корпоративе',
-    'позарился на самокат соседа',
-    'попался на краже велосипеда',
-    'поссорился с бабушкой',
-    'пошёл на рыбалку',
-    'провёл ночь в гнезде аиста',
-    'провёл ночь в муравейнике',
-    'прочитал лекцию о сексуальной ориентации',
-    'пытался провезти [СВОЕГО_ЛЮБИМЦА] в чемодане',
-    'РАЗВЕЛ КОСТЕР В МЕТРО',
-    'раздал свою зарплату бомжам',
-    'ранил ножом двоих полицейских',
-    'напал на прохожего с огнетушителем в руках',
-    'сбежал из кареты скорой помощи',
-    'сбежал из психушки',
-    'собирал валежник',
-    'убирался в квартире',
-    'УГНАЛ [МАРШРУТКУ]',
-    'УКРАЛ [СОБАКУ]',
-    'украл выручку',
-    'украл катафалк, увёз его в деревню',
-    'утопил знакомую в ванной',
-    'хвастался в Instagram брендовыми вещами',
-    'ХОТЕЛ [УБИТЬ] [ЖЕНУ]',
-    'хотел устроиться на работу в детский сад',
-  ],
-  'f': [
-    '[ВЗОРВАЛА] [БУДКУ]',
-    'брала взятки',
-    'взяла в заложники тестя',
-    'вломилась в чужой дом',
-    'готовила ужин',
-    'забрала ёлку в отделении банка',
-    'заколола мужа во время застолья',
-    'избила новогодней ёлкой директора школы',
-    'избила детей скакалкой',
-    'не пустила мужа на рыбалку',
-    'ОБЛИЛась БЕНЗИНОМ, ЗАГОРЕЛась',
-    'ограбила автомат с игрушками',
-    'отдала зарплату аферисту',
-    'ПОДожгла СВОИ ДОКУМЕНТЫ',
-    'пыталась украсть продукты в подгузнике',
-    'РАЗВЕЛа КОСТЕР В МЕТРО',
-    'раздала зарплату детям-сиротам',
-    'сбежала из психушки',
-    'сломала самогонный аппарат мужа',
-    'снялась обнажённой',
-    'снялась в порно',
-    'совершила ДТП с трактором',
-    'убила сестру банкой муки',
-    'УГНАЛА [МАРШРУТКУ]',
-    'УКРАЛА [СОБАКУ]',
-    'поймала [СОБАКУ]',
-    'гонялась за соседским ребёнком',
-    'фотографировала льва в цирке',
-    'ХОТЕЛа [УБИТЬ] [МУЖА]',
-  ],
-  'plural': [
-    'взорвали [БУДКУ]',
-    'вломились в чужой дом',
-    'выманили у студентки 2 млн рублей',
-    'задержали подростка с автоматом Калашникова',
-    'заказали убийство директора',
-    'избили на концерте полицейского',
-    'изнасиловали кондитера',
-    'ограбили автомат с игрушками',
-    'осквернили могилу неизвестного солдата',
-    'подожгли гаражный кооператив',
-    'ПОДожгли СВОИ ДОКУМЕНТЫ',
-    'подрались из-за трусов в секонд-хенде',
-    'пошли на рыбалку',
-    'провезли в метро гроб',
-    'пытались покончить с собой',
-    'РАЗВЕЛи КОСТЕР В МЕТРО',
-    'раздали свою зарплату бомжам',
-    'сбежали из психушки',
-    'сломали самогонный аппарат',
-    'угнали бетономешалку',
-    'УГНАЛИ МАРШРУТКУ, НАБРАЛИ ПАССАЖИРОВ',
-    'угнали танк-экспонат времен ВОВ',
-    'угнали трактор',
-    'угнали у фермера стадо баранов',
-    'УКРАЛИ [СОБАКУ]',
-    'УКРАЛИ чемодан, набитый дошираком',
-    'украли ларёк "Твоя любимая шаверма"',
-    'украли льва из местного цирка',
-    'украли несколько тонн сигарет',
-    'украли у горожан 20 млн рублей',
-    'устроили поножовщину с Дедом Морозом',
-  ]
-};
-
-Map<String, List> globalConclusion = {
-  'm': [
-    'в неадекватном состоянии',
-    'и [СЛУЧАЙНО] оскорбил [ПЕНСИОНЕРОВ]',
-    'и [СЛУЧАЙНО] [УБИЛ] [СОСЕДА]',
-    'и был задержан за мошенничество',
-    'и уволился',
-    'и выиграл в лотерею',
-    'И ЕДВА НЕ ЛИШИЛСЯ [ЛИШИЛСЯ]',
-    'и пел матерные частушки',
-    'и поджег квартиру',
-    'и получил пулю в живот',
-    'и просил встречи с [ПУТИНЫМ]',
-    'и угнал шесть автомобилей',
-    'и украл кошелек с деньгами',
-    'и уехал выпивать в деревню',
-    'и уехал на товарняке во Владивосток',
-    'И УМЕР',
-    'и умер от удара током',
-    'и устроил пенную вечеринку',
-    'и чуть не убил [СВОЕГО_ЛЮБИМЦА]',
-    'спасая [СВОЕГО_ЛЮБИМЦА]',
-    'чтобы вернуть [ВЕРНУТЬ_М]',
-    'чтобы войти в книгу рекордов Гинесса',
-    'чтобы его оставили в покое',
-    'чтобы замести следы изготовления самогона',
-    'чтобы защитить свою честь',
-    'чтобы отомстить',
-    'ЧТОБЫ СОГРЕТЬСЯ',
-    'чтобы уладить конфликт с соседом',
-  ],
-  'f': [
-    'и [СЛУЧАЙНО] [УБИЛА] [СОСЕДА]',
-    'и оскорбила [ПЕНСИОНЕРОВ]',
-    'и выиграла в лотерею',
-    'и выложила фото в инстраграмм',
-    'и едва не лишилась [ЛИШИЛСЯ]',
-    'и живёт одна уже несколько месяцев',
-    'и материлась невпопад',
-    'и НАДРУГАЛАСЬ над соседом',
-    'И ПОПРОСИЛа НЕ БЕСПОКОИТЬ',
-    'И ПРИ ЭТОМ СМЕЯЛась',
-    'и скрывается от правосудия',
-    'и требовала аудиенции с [ПУТИНЫМ]',
-    'И УМЕРла',
-    'ради веселья',
-    'с особой жестокостью',
-    'спасая [СВОЕГО_ЛЮБИМЦА]',
-    'чтобы вернуть [ВЕРНУТЬ_Ж]',
-    'чтобы вернуть мужа',
-    'чтобы войти в книгу рекордов Гинесса',
-    'чтобы её не заподозрили в измене',
-    'чтобы её оставили в покое',
-    'чтобы уладить конфликт с соседкой',
-    'ЧТОБЫ СОГРЕТЬСЯ',
-  ],
-  'plural': [
-    'в знак протеста против произвола христиан',
-    'и [СЛУЧАЙНО] [УБИЛИ] [СОСЕДА]',
-    'и оскорбили [ПЕНСИОНЕРОВ]',
-    'И ЕДВА НЕ ЛИШИЛись конечностей',
-    'и пели матерные частушки',
-    'И ПОПРОСИЛи НЕ БЕСПОКОИТЬ',
-    'И ПРИ ЭТОМ СМЕЯЛись',
-    'и отправились гулять по железнодорожным путям',
-    'и прострелили ногу преступнику с ножом',
-    'и скрываются от правосудия',
-    'и добивались встречи с [ПУТИНЫМ]',
-    'И УМЕРли',
-    'и устроили стрельбу из пневматики',
-    'ради веселья',
-    'с особой жестокостью',
-    'с целью друг друга убить',
-    'спасая [СВОЕГО_ЛЮБИМЦА]',
-    'угрожая оружием',
-    'чтобы войти в книгу рекордов Гинесса',
-    'чтобы их оставили в покое',
-    'чтобы наладить дружеские отношения',
-    'чтобы уладить конфликт с соседями',
-    'ЧТОБЫ СОГРЕТЬСЯ',
-  ]
-};
-
-List<Map> globalPredictEn = [
-  {'message': '[TWO] students of [UNIVERSITY]', 'sex': 'plural'},
-  {'message': '[TWO] [DRUNK] prostitutes from [CITY]', 'sex': 'plural'},
-  {'message': '[DRUNK] [GIRL] from [CITY]', 'sex': 'f'},
-  {'message': '[DRUNK] citizen from [CITY]', 'sex': 'f'},
-  {'message': '[DRUNK] gay activists', 'sex': 'plural'},
-  {'message': '[DRUNK] [CONGRESSMAN] from [CITY]', 'sex': 'm'},
-  {'message': '[DRUNK] [OLDMAN] in [CITY]', 'sex': 'm'},
-  {'message': '[DRUNK] [OLDMAN] from [CITY]', 'sex': 'm'},
-  {'message': '[DRUNK] [OLDMAN] from [CITY]', 'sex': 'm'},
-  {'message': '[DRUNK] [OLDMAN]', 'sex': 'm'},
-  {'message': '[DRUNK] [CITIZEN]', 'sex': 'm'},
-  {'message': '[DRUNK] [CITIZEN] with a laser stick', 'sex': 'm'},
-  {'message': '[DRUNK] [CITIZENS]', 'sex': 'plural'},
-  {'message': 'In [CITY] [TWO] [DRUNK] [GIRLS]', 'sex': 'plural'},
-  {'message': 'In [CITY] [DRUNK] [GIRL]', 'sex': 'f'},
-  {'message': 'In [CITY] [DRUNK] [OLDMAN]', 'sex': 'm'},
-  {'message': 'In [CITY] [DRUNK] Mexican worker', 'sex': 'm'},
-  {'message': 'Group of young men from [CITY]', 'sex': 'plural'},
-  {'message': 'Some guys from [CITY]', 'sex': 'plural'},
-  {'message': 'citizens from [CITY]', 'sex': 'plural'},
-  {'message': '[ONE_PLUS_ONE]', 'sex': 'plural'},
-  {'message': 'Bigfoot in [CITY]', 'sex': 'bf'},
-  {'message': 'Bigfoot', 'sex': 'bf'},
-  {'message': 'gay aliens', 'sex': 'aliens'},
-  {'message': 'aliens', 'sex': 'aliens'},
-];
-
 Map<String, List> globalSetsEn = {
   'GARAGE': [
     'a garage',
@@ -857,6 +653,129 @@ Map<String, List> globalSetsEn = {
   'TWO': ['two', 'three', 'four'],
 };
 
+Map<String, List> globalAction = {
+  'm': [
+    '[ВЗОРВАЛ] [БУДКУ]',
+    'боролся с неприятным запахом в туалете',
+    'взял в заложницы тещу',
+    'вломился в чужой дом',
+    'выстрелил в сожительницу из ружья',
+    'выстрелил мужчине в глаз',
+    'готовил ужин',
+    'залез в дом пенсионерки',
+    'в порыве страсти зарезал собутыльницу',
+    'заготовил на зиму 3 кг марихуаны',
+    'записался на шугаринг',
+    'захватил сосны на участке соседей',
+    'зашел в строительную фирму',
+    'избил несовершеннолетнего',
+    'изнасиловал кондуктора',
+    'изнасиловал коллектора',
+    'купил аккордеон',
+    'напал на офис микрозаймов',
+    'напоил кота самогонкой',
+    'нашёл две гранаты',
+    'незаконно охотился на косуль',
+    'обесточил посёлок',
+    'ОБЛИЛСЯ БЕНЗИНОМ, ЗАГОРЕЛСЯ',
+    'обнаружил в подвале скелет',
+    'ограбил автомат с игрушками',
+    'ограбил супругов, приютивших его на ночь',
+    'отравился этанолом',
+    'ПОДЖЕГ СВОИ ДОКУМЕНТЫ',
+    'поджёг не ту аптеку',
+    'подорвался на корпоративе',
+    'позарился на самокат соседа',
+    'попался на краже велосипеда',
+    'поссорился с бабушкой',
+    'пошёл на рыбалку',
+    'провёл ночь в гнезде аиста',
+    'провёл ночь в муравейнике',
+    'прочитал лекцию о сексуальной ориентации',
+    'пытался провезти [СВОЕГО_ЛЮБИМЦА] в чемодане',
+    'РАЗВЕЛ КОСТЕР В МЕТРО',
+    'раздал свою зарплату бомжам',
+    'ранил ножом двоих полицейских',
+    'напал на прохожего с огнетушителем в руках',
+    'сбежал из кареты скорой помощи',
+    'сбежал из психушки',
+    'собирал валежник',
+    'убирался в квартире',
+    'УГНАЛ [МАРШРУТКУ]',
+    'УКРАЛ [СОБАКУ]',
+    'украл выручку',
+    'украл катафалк, увёз его в деревню',
+    'утопил знакомую в ванной',
+    'хвастался в Instagram брендовыми вещами',
+    'ХОТЕЛ [УБИТЬ] [ЖЕНУ]',
+    'хотел устроиться на работу в детский сад',
+  ],
+  'f': [
+    '[ВЗОРВАЛА] [БУДКУ]',
+    'брала взятки',
+    'взяла в заложники тестя',
+    'вломилась в чужой дом',
+    'готовила ужин',
+    'забрала ёлку в отделении банка',
+    'заколола мужа во время застолья',
+    'избила новогодней ёлкой директора школы',
+    'избила детей скакалкой',
+    'не пустила мужа на рыбалку',
+    'ОБЛИЛась БЕНЗИНОМ, ЗАГОРЕЛась',
+    'ограбила автомат с игрушками',
+    'отдала зарплату аферисту',
+    'ПОДожгла СВОИ ДОКУМЕНТЫ',
+    'пыталась украсть продукты в подгузнике',
+    'РАЗВЕЛа КОСТЕР В МЕТРО',
+    'раздала зарплату детям-сиротам',
+    'сбежала из психушки',
+    'сломала самогонный аппарат мужа',
+    'снялась обнажённой',
+    'снялась в порно',
+    'совершила ДТП с трактором',
+    'убила сестру банкой муки',
+    'УГНАЛА [МАРШРУТКУ]',
+    'УКРАЛА [СОБАКУ]',
+    'поймала [СОБАКУ]',
+    'гонялась за соседским ребёнком',
+    'фотографировала льва в цирке',
+    'ХОТЕЛа [УБИТЬ] [МУЖА]',
+  ],
+  'plural': [
+    'взорвали [БУДКУ]',
+    'вломились в чужой дом',
+    'выманили у студентки 2 млн рублей',
+    'задержали подростка с автоматом Калашникова',
+    'заказали убийство директора',
+    'избили на концерте полицейского',
+    'изнасиловали кондитера',
+    'ограбили автомат с игрушками',
+    'осквернили могилу неизвестного солдата',
+    'подожгли гаражный кооператив',
+    'ПОДожгли СВОИ ДОКУМЕНТЫ',
+    'подрались из-за трусов в секонд-хенде',
+    'пошли на рыбалку',
+    'провезли в метро гроб',
+    'пытались покончить с собой',
+    'РАЗВЕЛи КОСТЕР В МЕТРО',
+    'раздали свою зарплату бомжам',
+    'сбежали из психушки',
+    'сломали самогонный аппарат',
+    'угнали бетономешалку',
+    'УГНАЛИ МАРШРУТКУ, НАБРАЛИ ПАССАЖИРОВ',
+    'угнали танк-экспонат времен ВОВ',
+    'угнали трактор',
+    'угнали у фермера стадо баранов',
+    'УКРАЛИ [СОБАКУ]',
+    'УКРАЛИ чемодан, набитый дошираком',
+    'украли ларёк "Твоя любимая шаверма"',
+    'украли льва из местного цирка',
+    'украли несколько тонн сигарет',
+    'украли у горожан 20 млн рублей',
+    'устроили поножовщину с Дедом Морозом',
+  ]
+};
+
 Map<String, List> globalActionEn = {
   'm': [
     '[BLEW_UP] [GARAGE]',
@@ -977,11 +896,88 @@ Map<String, List> globalActionEn = {
   ],
 };
 
-List<String> russianLocales = [
-  'ru',
-  'be',
-  'uk',
-];
+Map<String, List> globalConclusion = {
+  'm': [
+    'в неадекватном состоянии',
+    'и [СЛУЧАЙНО] оскорбил [ПЕНСИОНЕРОВ]',
+    'и [СЛУЧАЙНО] [УБИЛ] [СОСЕДА]',
+    'и был задержан за мошенничество',
+    'и уволился',
+    'и выиграл в лотерею',
+    'И ЕДВА НЕ ЛИШИЛСЯ [ЛИШИЛСЯ]',
+    'и пел матерные частушки',
+    'и поджег квартиру',
+    'и получил пулю в живот',
+    'и просил встречи с [ПУТИНЫМ]',
+    'и угнал шесть автомобилей',
+    'и украл кошелек с деньгами',
+    'и уехал выпивать в деревню',
+    'и уехал на товарняке во Владивосток',
+    'И УМЕР',
+    'и умер от удара током',
+    'и устроил пенную вечеринку',
+    'и чуть не убил [СВОЕГО_ЛЮБИМЦА]',
+    'спасая [СВОЕГО_ЛЮБИМЦА]',
+    'чтобы вернуть [ВЕРНУТЬ_М]',
+    'чтобы войти в книгу рекордов Гинесса',
+    'чтобы его оставили в покое',
+    'чтобы замести следы изготовления самогона',
+    'чтобы защитить свою честь',
+    'чтобы отомстить',
+    'ЧТОБЫ СОГРЕТЬСЯ',
+    'чтобы уладить конфликт с соседом',
+  ],
+  'f': [
+    'и [СЛУЧАЙНО] [УБИЛА] [СОСЕДА]',
+    'и оскорбила [ПЕНСИОНЕРОВ]',
+    'и выиграла в лотерею',
+    'и выложила фото в инстраграмм',
+    'и едва не лишилась [ЛИШИЛСЯ]',
+    'и живёт одна уже несколько месяцев',
+    'и материлась невпопад',
+    'и НАДРУГАЛАСЬ над соседом',
+    'И ПОПРОСИЛа НЕ БЕСПОКОИТЬ',
+    'И ПРИ ЭТОМ СМЕЯЛась',
+    'и скрывается от правосудия',
+    'и требовала аудиенции с [ПУТИНЫМ]',
+    'И УМЕРла',
+    'ради веселья',
+    'с особой жестокостью',
+    'спасая [СВОЕГО_ЛЮБИМЦА]',
+    'чтобы вернуть [ВЕРНУТЬ_Ж]',
+    'чтобы вернуть мужа',
+    'чтобы войти в книгу рекордов Гинесса',
+    'чтобы её не заподозрили в измене',
+    'чтобы её оставили в покое',
+    'чтобы уладить конфликт с соседкой',
+    'ЧТОБЫ СОГРЕТЬСЯ',
+  ],
+  'plural': [
+    'в знак протеста против произвола христиан',
+    'и [СЛУЧАЙНО] [УБИЛИ] [СОСЕДА]',
+    'и оскорбили [ПЕНСИОНЕРОВ]',
+    'И ЕДВА НЕ ЛИШИЛись конечностей',
+    'и пели матерные частушки',
+    'И ПОПРОСИЛи НЕ БЕСПОКОИТЬ',
+    'И ПРИ ЭТОМ СМЕЯЛись',
+    'и отправились гулять по железнодорожным путям',
+    'и прострелили ногу преступнику с ножом',
+    'и скрываются от правосудия',
+    'и добивались встречи с [ПУТИНЫМ]',
+    'И УМЕРли',
+    'и устроили стрельбу из пневматики',
+    'ради веселья',
+    'с особой жестокостью',
+    'с целью друг друга убить',
+    'спасая [СВОЕГО_ЛЮБИМЦА]',
+    'угрожая оружием',
+    'чтобы войти в книгу рекордов Гинесса',
+    'чтобы их оставили в покое',
+    'чтобы наладить дружеские отношения',
+    'чтобы уладить конфликт с соседями',
+    'ЧТОБЫ СОГРЕТЬСЯ',
+  ]
+};
 
 Map<String, List> globalConclusionEn = {
   'm': [
@@ -1056,85 +1052,102 @@ Map<String, List> globalConclusionEn = {
   ],
 };
 
+List<String> russianLocales = [
+  'ru',
+  'be',
+  'uk',
+];
+
 class MadNews {
-  String personString;
-  String sex;
-  String actionString;
-  String conclusionString;
+  String personString = '';
+  String sex = '';
+  String actionString = '';
+  String conclusionString = '';
 
   MadNews() {
     String locale = Platform.localeName.substring(0, 2);
-    print('Locale: $locale');
-    List<Map> predict = new List<Map>.from(globalPredict);
-    Map<String, List> localActions = new Map<String, List>.from(globalAction);
-    Map<String, List> localConclusion = new Map<String, List>.from(globalConclusion);
-    if (russianLocales.indexOf(locale.toLowerCase()) == -1) {
-      predict = new List<Map>.from(globalPredictEn);
-      localActions = new Map<String, List>.from(globalActionEn);
-      localConclusion = new Map<String, List>.from(globalConclusionEn);
+    if (kDebugMode) {
+      print('Locale: $locale');
+    }
+    List<Map> predict = List<Map>.from(globalPredict);
+    Map<String, List> localActions = Map<String, List>.from(globalAction);
+    Map<String, List> localConclusion = Map<String, List>.from(globalConclusion);
+    if (!russianLocales.contains(locale.toLowerCase())) {
+      predict = List<Map>.from(globalPredictEn);
+      localActions = Map<String, List>.from(globalActionEn);
+      localConclusion = Map<String, List>.from(globalConclusionEn);
     }
 
-    print('getPerson');
-    var personObject = predict[new Random().nextInt(predict.length)];
-    this.sex = personObject['sex'];
-    this.personString = personObject['message'];
-    this.personString = this.randomizeTemplate(this.personString).toUpperCase();
+    if (kDebugMode) {
+      print('getPerson');
+    }
+    var personObject = predict[Random().nextInt(predict.length)];
+    sex = personObject['sex'];
+    personString = personObject['message'];
+    personString = randomizeTemplate(personString).toUpperCase();
 
-    print('getAction');
-    List<String> actions = new List<String>.from(localActions[this.sex]);
-    this.actionString = actions[new Random().nextInt(actions.length)];
-    this.actionString = this.randomizeTemplate(this.actionString).toUpperCase();
+    if (kDebugMode) {
+      print('getAction');
+    }
+    List<String> actions = List<String>.from(localActions[sex] as Iterable);
+    actionString = actions[Random().nextInt(actions.length)];
+    actionString = randomizeTemplate(actionString).toUpperCase();
 
-    print('getConclusion');
-    List<String> conclusions =
-    new List<String>.from(localConclusion[this.sex]);
-    this.conclusionString =
-    conclusions[new Random().nextInt(conclusions.length)];
-    this.conclusionString = this.randomizeTemplate(this.conclusionString).toUpperCase();
+    if (kDebugMode) {
+      print('getConclusion');
+    }
+    List<String> conclusions = List<String>.from(localConclusion[sex] as Iterable);
+    conclusionString =
+    conclusions[Random().nextInt(conclusions.length)];
+    conclusionString = randomizeTemplate(conclusionString).toUpperCase();
   }
 
   String getPerson() {
-    return this.personString;
+    return personString;
   }
 
   String getAction() {
-    return this.actionString;
+    return actionString;
   }
 
   String getConclusion() {
-    return this.conclusionString;
+    return conclusionString;
   }
 
   String randomizeTemplate(template) {
     String locale = Platform.localeName.substring(0, 2);
-    Map<String, List> localSets = new Map<String, List>.from(globalSets);
-    if (russianLocales.indexOf(locale.toLowerCase()) == -1) {
-      localSets = new Map<String, List>.from(globalSetsEn);
+    Map<String, List> localSets = Map<String, List>.from(globalSets);
+    if (!russianLocales.contains(locale.toLowerCase())) {
+      localSets = Map<String, List>.from(globalSetsEn);
     }
-    RegExp exp = new RegExp(
-      "\[[а-яА-Яa-zA-Z_\w]*\]",
+    RegExp exp = RegExp(
+      "[[а-яА-Яa-zA-Z_w]*]",
       caseSensitive: false,
       multiLine: true,
     );
     Iterable<RegExpMatch> matches = exp.allMatches(template);
-    if (matches.length > 0) {
-      matches.forEach((match) {
+    if (matches.isNotEmpty) {
+      for (var match in matches) {
         var currentMatch = match.group(0);
-        if (currentMatch.length < 2) return;
-        List<dynamic> randomSets = localSets[
-            match.group(0).substring(0, currentMatch.length - 1).substring(1)];
-        if (randomSets != null && randomSets.length > 0) {
-          var randomSet = randomSets[new Random().nextInt(randomSets.length)];
+        var length = currentMatch?.length;
+        if (length! < 2) continue;
+        List? randomSets = localSets[match.group(0)?.substring(0, currentMatch!.length - 1).substring(1)];
+        if (randomSets != null && randomSets.isNotEmpty) {
+          var randomSet = randomSets[Random().nextInt(randomSets.length)];
           template =
               template.replaceAll(currentMatch, randomSet.toString().trim());
         } else {
-          print('randomSets length is 0');
+          if (kDebugMode) {
+            print('randomSets length is 0');
+          }
         }
-      });
+      }
     }
     if (template == null) {
-      print('template is null');
-      print(template);
+      if (kDebugMode) {
+        print('template is null');
+        print(template);
+      }
       template = '';
     }
     return template;
