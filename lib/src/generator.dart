@@ -1078,28 +1078,26 @@ class MadNews {
       localConclusion = Map<String, List>.from(globalConclusionEn);
     }
 
-    if (kDebugMode) {
-      print('getPerson');
-    }
     var personObject = predict[Random().nextInt(predict.length)];
     sex = personObject['sex'];
     personString = personObject['message'];
     personString = randomizeTemplate(personString).toUpperCase();
-
     if (kDebugMode) {
-      print('getAction');
+      print('getPerson: $personString');
     }
     List<String> actions = List<String>.from(localActions[sex] as Iterable);
     actionString = actions[Random().nextInt(actions.length)];
     actionString = randomizeTemplate(actionString).toUpperCase();
-
     if (kDebugMode) {
-      print('getConclusion');
+      print('getAction: $actionString');
     }
     List<String> conclusions = List<String>.from(localConclusion[sex] as Iterable);
     conclusionString =
     conclusions[Random().nextInt(conclusions.length)];
     conclusionString = randomizeTemplate(conclusionString).toUpperCase();
+    if (kDebugMode) {
+      print('getConclusion: $conclusionString');
+    }
   }
 
   String getPerson() {
