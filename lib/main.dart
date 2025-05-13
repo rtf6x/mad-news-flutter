@@ -1,23 +1,21 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'src/generator.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(_BaseLayout());
+  runApp(_App());
 }
 
-class _BaseLayout extends StatefulWidget{
+class _App extends StatefulWidget{
   @override
   _AppState createState() => _AppState();
 }
 
-class _AppState extends State<_BaseLayout> {
-  String person = 'person';
-  String action = 'action';
-  String conclusion = 'conclusion';
+class _AppState extends State<_App> {
+  String person = '';
+  String action = '';
+  String conclusion = '';
   String asset = 'assets/bg.jpg';
   List assets = [
     'assets/bg.jpg',
@@ -49,13 +47,7 @@ class _AppState extends State<_BaseLayout> {
     reloadMadness();
   }
 
-  Widget madContent(BuildContext context) {
-    final double width = MediaQuery.sizeOf(context).width;
-    if (kDebugMode) {
-      print('person: $person');
-      print('action: $action');
-      print('conclusion: $conclusion');
-    }
+  Widget madContent(double width) {
     return SizedBox(
         width: width,
         child: Column(
@@ -110,6 +102,7 @@ class _AppState extends State<_BaseLayout> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
+    final double width = MediaQuery.sizeOf(context).width;
     return MaterialApp(
       title: 'MadNews',
       color: Colors.transparent,
@@ -132,7 +125,7 @@ class _AppState extends State<_BaseLayout> {
             child: FittedBox(
               fit: BoxFit.fitWidth,
               alignment: Alignment.center,
-              child: madContent(context),
+              child: madContent(width),
             ),
           ),
         ),
