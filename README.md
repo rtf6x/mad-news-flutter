@@ -4,18 +4,18 @@ MadNews
 
 ## Getting Started
 
-### android/key.properties
+### Android signing (local)
 
-Signing config for release builds (committed for CI in a private repo):
+Create `android/key.properties` locally (not in git):
 
 ```
 storePassword=[pass]
 keyPassword=[pass]
 keyAlias=rootfox
-storeFile=keystore/rootfox.jks
+storeFile=/absolute/or/relative/path/to/release.jks
 ```
 
-Keystore path is relative to the `android/` directory.
+Or use `storeFile=keystore/release.jks` with the `.jks` file under `android/keystore/` (also gitignored).
 
 ### Versioning
 
@@ -29,13 +29,8 @@ CI does not edit `pubspec.yaml`. GitHub Actions passes version via Flutter flags
 ### Local development
 
 ```bash
-# To run the app:
 flutter run
-
-# To run the app showing Arabic:
 flutter run lib/arabic.dart
-
-# Release:
 flutter clean && flutter build appbundle --release
 ```
 
@@ -43,7 +38,30 @@ flutter clean && flutter build appbundle --release
 
 | Workflow | Trigger | Output |
 |----------|---------|--------|
-| [build-android.yml](.github/workflows/build-android.yml) | Push to `master` | `app-release.aab` artifact (`madnews-android-<build>`) |
-| [build-ios.yml](.github/workflows/build-ios.yml) | Manual (`workflow_dispatch`) | `*.ipa` artifact (requires Apple signing setup) |
+| [build-android.yml](.github/workflows/build-android.yml) | Push to `master` | `app-release.aab` artifact |
+| [build-ios.yml](.github/workflows/build-ios.yml) | Manual | `*.ipa` (Apple signing via secrets, TBD) |
 
-After push to `master` on GitHub, download the `.aab` from the Actions run → Artifacts.
+### Where to put secrets (public repo)
+
+**Do not commit** `key.properties`, `.jks`, or passwords.
+
+On GitHub: **Repository → Settings → Secrets and variables → Actions → New repository secret**
+
+| Secret name | Value |
+|-------------|--------|
+| `ANDROID_KEYSTORE_BASE64` | Your `.jks` file, base64-encoded (one line) |
+| `ANDROID_KEYSTORE_PASSWORD` | Keystore password (`storePassword`) |
+| `ANDROID_KEY_PASSWORD` | Key password (`keyPassword`) |
+| `ANDROID_KEY_ALIAS` | Key alias (e.g. `rootfox`) |
+
+Encode keystore locally:
+
+```bash
+base64 -i path/to/release.jks | tr -d '\n' | pbcopy   # macOS
+```
+
+Paste into the `ANDROID_KEYSTORE_BASE64` secret (no newlines in the value).
+
+### Security note
+
+If signing files were ever pushed to a **public** repo, treat the key as exposed: rotate passwords if possible and consider a **new upload key** in Play Console. Old commits may still contain secrets until history is rewritten (`git filter-repo` / GitHub support).

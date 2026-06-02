@@ -18,6 +18,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Secrets: Settings → Secrets and variables → Actions → Repository secrets
+      - name: Set up Android signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          mkdir -p android/keystore
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/keystore/release.jks
+          cat > android/key.properties <<EOF
+          storePassword=${ANDROID_KEYSTORE_PASSWORD}
+          keyPassword=${ANDROID_KEY_PASSWORD}
+          keyAlias=${ANDROID_KEY_ALIAS}
+          storeFile=keystore/release.jks
+          EOF
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
