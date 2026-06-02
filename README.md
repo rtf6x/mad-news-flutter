@@ -15,7 +15,7 @@ keyAlias=rootfox
 storeFile=/absolute/or/relative/path/to/release.jks
 ```
 
-Or use `storeFile=keystore/release.jks` with the `.jks` file under `android/keystore/` (also gitignored).
+Paths in `storeFile` are resolved from the **`android/`** directory (not `android/app/`). For example, use `storeFile=keystore/release.jks` with the `.jks` file under `android/keystore/` (also gitignored).
 
 ### Versioning
 
