@@ -1,0 +1,43 @@
+# iOS release build (placeholder).
+# Requires Apple signing: certificate + provisioning profile via GitHub Secrets
+# (e.g. apple-actions/import-codesign-certs or Fastlane Match) before enabling.
+# Uses the same BUILD_NUMBER offset as build-android.yml for consistent versioning.
+name: Build iOS
+
+on:
+  workflow_dispatch:
+
+env:
+  BUILD_NAME: "2.0.7"
+  BUILD_NUMBER: ${{ 49 + github.run_number }}
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # TODO: import signing certificates and provisioning profiles before enabling.
+      - name: Build IPA
+        run: |
+          flutter build ipa --release \
+            --build-name="${{ env.BUILD_NAME }}" \
+            --build-number="${{ env.BUILD_NUMBER }}"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: madnews-ios-${{ env.BUILD_NUMBER }}
+          path: build/ios/ipa/*.ipa
+          retention-days: 90
+          if-no-files-found: error
