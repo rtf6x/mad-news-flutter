@@ -54,7 +54,7 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 
 | Workflow | Trigger | Output |
 |----------|---------|--------|
-| [build-android.yml](.github/workflows/build-android.yml) | Push to `master` | `app-release.aab` artifact |
+| [build-android.yml](.github/workflows/build-android.yml) | Manual | `app-release.aab` artifact |
 | [build-ios.yml](.github/workflows/build-ios.yml) | Manual | Signed `*.ipa` artifact |
 
 ### Where to put secrets (public repo)

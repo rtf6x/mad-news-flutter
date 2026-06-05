@@ -1,11 +1,9 @@
-# Release Android App Bundle on push to main.
-# iOS: see build-ios.yml (manual / future signing setup).
+# Release Android App Bundle (manual).
+# iOS: see build-ios.yml.
 name: Build Android
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 env:
   BUILD_NAME: "2.0.7"
