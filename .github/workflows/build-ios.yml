@@ -1,6 +1,4 @@
-# iOS release build (placeholder).
-# Requires Apple signing: certificate + provisioning profile via GitHub Secrets
-# (e.g. apple-actions/import-codesign-certs or Fastlane Match) before enabling.
+# iOS release build with Apple code signing via GitHub Secrets.
 # Uses the same BUILD_NUMBER offset as build-android.yml for consistent versioning.
 name: Build iOS
 
@@ -15,7 +13,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set build number
         run: echo "BUILD_NUMBER=$((49 + ${{ github.run_number }}))" >> "$GITHUB_ENV"
@@ -29,15 +27,37 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # TODO: import signing certificates and provisioning profiles before enabling.
+      - name: Import code signing certificate
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+
+      - name: Install provisioning profile
+        env:
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          PP_PATH="$RUNNER_TEMP/build.mobileprovision"
+          printf '%s' "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PP_PATH"
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          PP_UUID=$(security cms -D -i "$PP_PATH" | plutil -extract UUID raw -)
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/"$PP_UUID".mobileprovision
+
+      - name: Configure code signing
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          sed -i '' "s/DEVELOPMENT_TEAM = \"\";/DEVELOPMENT_TEAM = ${APPLE_TEAM_ID};/g" ios/Runner.xcodeproj/project.pbxproj
+
       - name: Build IPA
         run: |
           flutter build ipa --release \
             --build-name="${{ env.BUILD_NAME }}" \
-            --build-number="${{ env.BUILD_NUMBER }}"
+            --build-number="${{ env.BUILD_NUMBER }}" \
+            --export-options-plist=ios/ExportOptions.plist
 
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: madnews-ios-${{ env.BUILD_NUMBER }}
           path: build/ios/ipa/*.ipa
