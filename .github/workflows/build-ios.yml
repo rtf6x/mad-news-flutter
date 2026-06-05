@@ -28,7 +28,7 @@ jobs:
         run: flutter pub get
 
       - name: Import code signing certificate
-        uses: apple-actions/import-codesign-certs@v3
+        uses: apple-actions/import-codesign-certs@v6
         with:
           p12-file-base64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
@@ -113,7 +113,7 @@ jobs:
             --export-options-plist=ios/ExportOptions.plist
 
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: madnews-ios-${{ env.BUILD_NUMBER }}
           path: build/ios/ipa/*.ipa

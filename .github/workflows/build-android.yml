@@ -61,7 +61,7 @@ jobs:
             --build-number="${{ env.BUILD_NUMBER }}"
 
       - name: Upload App Bundle artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: madnews-android-${{ env.BUILD_NUMBER }}
           path: build/app/outputs/bundle/release/app-release.aab
