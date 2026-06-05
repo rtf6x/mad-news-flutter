@@ -42,12 +42,68 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           PP_UUID=$(security cms -D -i "$PP_PATH" | plutil -extract UUID raw -)
           cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/"$PP_UUID".mobileprovision
+          echo "PP_UUID=$PP_UUID" >> "$GITHUB_ENV"
 
       - name: Configure code signing
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          sed -i '' "s/DEVELOPMENT_TEAM = \"\";/DEVELOPMENT_TEAM = ${APPLE_TEAM_ID};/g" ios/Runner.xcodeproj/project.pbxproj
+          python3 <<'PY'
+          import os
+          import re
+
+          path = "ios/Runner.xcodeproj/project.pbxproj"
+          team = os.environ["APPLE_TEAM_ID"]
+          profile = os.environ["PP_UUID"]
+
+          with open(path, encoding="utf-8") as f:
+              content = f.read()
+
+          def patch_runner_block(block: str) -> str:
+              if "PRODUCT_BUNDLE_IDENTIFIER = cc.rootfox.madnews;" not in block:
+                  return block
+              if "cc.rootfox.madnews.RunnerTests" in block:
+                  return block
+
+              block = block.replace("CODE_SIGN_STYLE = Automatic;", "CODE_SIGN_STYLE = Manual;")
+              block = block.replace('DEVELOPMENT_TEAM = "";', f"DEVELOPMENT_TEAM = {team};")
+
+              if "PROVISIONING_PROFILE_SPECIFIER" not in block:
+                  team_line = f"DEVELOPMENT_TEAM = {team};"
+                  signing_lines = (
+                      f'{team_line}\n'
+                      f'\t\t\t\t"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";\n'
+                      f'\t\t\t\tCODE_SIGN_IDENTITY = "Apple Distribution";\n'
+                      f'\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = {profile};'
+                  )
+                  block = block.replace(team_line, signing_lines, 1)
+
+              return block
+
+          content = re.sub(
+              r"/\* (?:Debug|Release|Profile) \*/ = \{.*?name = (?:Debug|Release|Profile);\n\t\t\};",
+              lambda m: patch_runner_block(m.group(0)),
+              content,
+              flags=re.DOTALL,
+          )
+
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(content)
+
+          import plistlib
+
+          export_options = {
+              "method": "app-store",
+              "signingStyle": "manual",
+              "teamID": team,
+              "uploadSymbols": True,
+              "provisioningProfiles": {
+                  "cc.rootfox.madnews": profile,
+              },
+          }
+          with open("ios/ExportOptions.plist", "wb") as f:
+              plistlib.dump(export_options, f)
+          PY
 
       - name: Build IPA
         run: |
