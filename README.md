@@ -33,11 +33,15 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 
 The IPA is written to `build/ios/ipa/`. Upload via **Transporter** or Xcode Organizer.
 
-Regenerate iOS launcher icons from `assets/app_icon.png`:
+### App icon
+
+Master icon: [`assets/app_icon.png`](assets/app_icon.png) — **1024×1024 px** PNG (dark gray background, white **MN?** text). The current file is 192×192 and is too small for App Store; replace it with a proper export from your design tool, then regenerate platform icons:
 
 ```bash
-python3 tool/generate_ios_icons.py
+dart run flutter_launcher_icons
 ```
+
+This updates Android `mipmap-*` and iOS `AppIcon.appiconset` from the same source.
 
 ### Versioning
 
