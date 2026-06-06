@@ -10,10 +10,15 @@ env:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Verify Xcode and iOS SDK
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
 
       - name: Set build number
         run: echo "BUILD_NUMBER=$((49 + ${{ github.run_number }}))" >> "$GITHUB_ENV"

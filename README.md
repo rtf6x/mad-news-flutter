@@ -19,7 +19,7 @@ Paths in `storeFile` are resolved from the **`android/`** directory (not `androi
 
 ### iOS signing (local)
 
-Requires Xcode on macOS and an Apple Developer account with:
+Requires **Xcode 26+** (iOS 26 SDK) on macOS and an Apple Developer account with:
 
 - App ID: `cc.rootfox.madnews`
 - Apple Distribution certificate
@@ -55,7 +55,7 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 | Workflow | Trigger | Output |
 |----------|---------|--------|
 | [build-android.yml](.github/workflows/build-android.yml) | Manual | `app-release.aab` artifact |
-| [build-ios.yml](.github/workflows/build-ios.yml) | Manual | Signed `*.ipa` artifact |
+| [build-ios.yml](.github/workflows/build-ios.yml) | Manual (`macos-26`, Xcode 26) | Signed `*.ipa` artifact |
 
 ### Where to put secrets (public repo)
 
