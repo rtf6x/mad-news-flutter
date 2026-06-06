@@ -33,6 +33,12 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 
 The IPA is written to `build/ios/ipa/`. Upload via **Transporter** or Xcode Organizer.
 
+Regenerate iOS launcher icons from `assets/app_icon.png`:
+
+```bash
+python3 tool/generate_ios_icons.py
+```
+
 ### Versioning
 
 `pubspec.yaml` holds the local dev version (e.g. `2.0.7+27` — `versionName` + `versionCode`).
