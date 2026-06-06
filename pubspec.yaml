@@ -48,10 +48,11 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
 
 flutter_launcher_icons:
-  android: true
+  android: false
   ios: true
   image_path: assets/app_icon.png
   remove_alpha_ios: true
+  background_color_ios: "#454545"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
