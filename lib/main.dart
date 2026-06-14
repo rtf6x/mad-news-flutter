@@ -105,8 +105,8 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
           FavoritesScreen(
             key: _favoritesKey,
             settings: widget.settings,
-            onSelectEntry: (entry) {
-              _homeKey.currentState?.applyEntry(entry);
+            onSelectEntry: (entry) async {
+              await _homeKey.currentState?.showEntry(entry);
               _openHome();
             },
             onDelete: _onFavoriteDeleted,
@@ -121,8 +121,8 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
           SidePanelScreen(
             key: _sidePanelKey,
             settings: widget.settings,
-            onSelectEntry: (entry) {
-              _homeKey.currentState?.applyEntry(entry);
+            onSelectEntry: (entry) async {
+              await _homeKey.currentState?.showEntry(entry);
               _openHome();
             },
             onLocaleChanged: () {

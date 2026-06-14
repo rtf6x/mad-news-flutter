@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  BUILD_NAME: "2.2.0"
+  BUILD_NAME: "2.2.1"
 
 jobs:
   build:

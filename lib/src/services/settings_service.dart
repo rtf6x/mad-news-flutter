@@ -11,7 +11,7 @@ class SettingsService {
   static const _historyKey = 'headline_history';
   static const _favoritesKey = 'headline_favorites';
   static const _androidLocaleKey = 'android_locale';
-  static const maxHistoryItems = 100;
+  static const maxHistoryItems = 5;
 
   final SharedPreferences _prefs;
 
@@ -25,9 +25,15 @@ class SettingsService {
       return [];
     }
     final list = jsonDecode(raw) as List<dynamic>;
-    return list
+    final history = list
         .map((item) => HeadlineEntry.fromJson(item as Map<String, dynamic>))
         .toList();
+    if (history.length > maxHistoryItems) {
+      final trimmed = history.sublist(0, maxHistoryItems);
+      await _saveHistory(trimmed);
+      return trimmed;
+    }
+    return history;
   }
 
   Future<void> addToHistory(HeadlineEntry entry) async {

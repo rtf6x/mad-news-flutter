@@ -38,6 +38,7 @@ class HomeScreenState extends State<HomeScreen> {
   HeadlineEntry? _currentEntry;
   bool _isLiked = false;
   bool _sharing = false;
+  bool _ignoreTap = false;
 
   @override
   void initState() {
@@ -46,6 +47,9 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> generateNew() async {
+    if (_ignoreTap) {
+      return;
+    }
     final locale = await widget.settings.resolveGeneratorLocale();
     final madness = MadNews(localeOverride: locale);
     final entry = HeadlineEntry.create(
@@ -68,6 +72,15 @@ class HomeScreenState extends State<HomeScreen> {
       _currentEntry = entry;
       _isLiked = liked;
     });
+  }
+
+  Future<void> showEntry(HeadlineEntry entry) async {
+    _ignoreTap = true;
+    await applyEntry(entry);
+    await Future<void>.delayed(const Duration(milliseconds: 350));
+    if (mounted) {
+      _ignoreTap = false;
+    }
   }
 
   Future<void> toggleLike() async {
@@ -253,50 +266,58 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    tooltip: 'Liked headlines',
-                    onPressed: widget.onOpenFavorites,
-                    icon: const Icon(Icons.favorite_border, color: Colors.white),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    tooltip: _isLiked ? 'Unlike' : 'Like',
-                    onPressed: toggleLike,
-                    icon: Icon(
-                      _isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: _isLiked ? Colors.redAccent : Colors.white,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      tooltip: 'Liked headlines',
+                      onPressed: widget.onOpenFavorites,
+                      icon: const Icon(
+                        Icons.chevron_left,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    tooltip: 'Share',
-                    onPressed: _sharing ? null : shareHeadline,
-                    icon: Icon(
-                      _sharing ? Icons.hourglass_top : Icons.share,
-                      color: Colors.white,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          tooltip: _isLiked ? 'Unlike' : 'Like',
+                          onPressed: toggleLike,
+                          icon: Icon(
+                            _isLiked ? Icons.favorite : Icons.favorite_border,
+                            color: _isLiked ? Colors.redAccent : Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'Share',
+                          onPressed: _sharing ? null : shareHeadline,
+                          icon: Icon(
+                            _sharing ? Icons.hourglass_top : Icons.share,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  IconButton(
-                    tooltip: 'History & settings',
-                    onPressed: widget.onOpenSidePanel,
-                    icon: const Icon(Icons.menu, color: Colors.white),
-                  ),
-                ],
+                    IconButton(
+                      tooltip: 'History & settings',
+                      onPressed: widget.onOpenSidePanel,
+                      icon: const Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Positioned(
-            left: 12,
-            bottom: 24,
-            child: Icon(Icons.chevron_right, color: Colors.white70, size: 28),
-          ),
-          const Positioned(
-            right: 12,
-            bottom: 24,
-            child: Icon(Icons.chevron_left, color: Colors.white70, size: 28),
           ),
         ],
       ),
