@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/headline_entry.dart';
 import '../services/settings_service.dart';
@@ -51,6 +51,17 @@ class SidePanelScreenState extends State<SidePanelScreen> {
     widget.onLocaleChanged();
   }
 
+  Future<void> _openIosSettings() async {
+    final uri = Uri.parse('app-settings:');
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open Settings')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,9 +100,7 @@ class SidePanelScreenState extends State<SidePanelScreen> {
                 style: TextStyle(color: Colors.white60),
               ),
               trailing: TextButton(
-                onPressed: () {
-                  AppSettings.openAppSettings();
-                },
+                onPressed: _openIosSettings,
                 child: const Text('Open Settings'),
               ),
             ),
