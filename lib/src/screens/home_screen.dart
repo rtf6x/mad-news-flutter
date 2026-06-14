@@ -39,6 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
   bool _isLiked = false;
   bool _sharing = false;
   bool _ignoreTap = false;
+  int _generationToken = 0;
 
   @override
   void initState() {
@@ -50,7 +51,11 @@ class HomeScreenState extends State<HomeScreen> {
     if (_ignoreTap) {
       return;
     }
+    final token = ++_generationToken;
     final locale = await widget.settings.resolveGeneratorLocale();
+    if (!mounted || token != _generationToken) {
+      return;
+    }
     final madness = MadNews(localeOverride: locale);
     final entry = HeadlineEntry.create(
       person: madness.getPerson().trim(),
@@ -60,6 +65,9 @@ class HomeScreenState extends State<HomeScreen> {
           DateTime.now().millisecondsSinceEpoch % headlineAssets.length],
     );
     await widget.settings.addToHistory(entry);
+    if (!mounted || token != _generationToken) {
+      return;
+    }
     await applyEntry(entry);
   }
 
@@ -74,13 +82,23 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> showEntry(HeadlineEntry entry) async {
+  void showEntry(HeadlineEntry entry) {
+    _generationToken++;
     _ignoreTap = true;
-    await applyEntry(entry);
-    await Future<void>.delayed(const Duration(milliseconds: 350));
-    if (mounted) {
-      _ignoreTap = false;
-    }
+    setState(() {
+      _currentEntry = entry;
+    });
+    widget.settings.isFavorite(entry.id).then((liked) {
+      if (!mounted || _currentEntry?.id != entry.id) {
+        return;
+      }
+      setState(() => _isLiked = liked);
+    });
+    Future<void>.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() => _ignoreTap = false);
+      }
+    });
   }
 
   Future<void> toggleLike() async {
@@ -221,7 +239,7 @@ class HomeScreenState extends State<HomeScreen> {
           RepaintBoundary(
             key: _captureKey,
             child: GestureDetector(
-              onTap: generateNew,
+              onTap: _ignoreTap ? null : generateNew,
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
