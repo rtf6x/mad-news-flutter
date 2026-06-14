@@ -54,5 +54,7 @@
 	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>MadNews saves generated headline images to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MadNews needs access to your photo library to save generated headline images.</string>
 </dict>
 </plist>
