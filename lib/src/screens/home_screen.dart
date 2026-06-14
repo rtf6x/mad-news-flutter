@@ -1,146 +1,35 @@
 import 'package:flutter/material.dart';
 
-import '../generator.dart';
 import '../models/headline_entry.dart';
 import '../services/screenshot_service.dart';
-import '../services/settings_service.dart';
-
-const headlineAssets = [
-  'assets/bg.jpg',
-  'assets/bg2.jpg',
-  'assets/bg3.jpg',
-  'assets/bg4.jpg',
-  'assets/bg5.jpg',
-  'assets/bg6.jpg',
-];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
-    required this.settings,
+    required this.entry,
+    required this.isLiked,
+    required this.blockGenerate,
+    required this.onGenerateNew,
+    required this.onToggleLike,
     required this.onOpenFavorites,
     required this.onOpenSidePanel,
-    required this.onFavoritesChanged,
   });
 
-  final SettingsService settings;
+  final HeadlineEntry entry;
+  final bool isLiked;
+  final bool blockGenerate;
+  final VoidCallback onGenerateNew;
+  final VoidCallback onToggleLike;
   final VoidCallback onOpenFavorites;
   final VoidCallback onOpenSidePanel;
-  final VoidCallback onFavoritesChanged;
 
   @override
-  State<HomeScreen> createState() => HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _captureKey = GlobalKey();
-
-  HeadlineEntry? _currentEntry;
-  bool _isLiked = false;
   bool _sharing = false;
-  bool _ignoreTap = false;
-  int _generationToken = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    generateNew();
-  }
-
-  Future<void> generateNew() async {
-    if (_ignoreTap) {
-      return;
-    }
-    final token = ++_generationToken;
-    final locale = await widget.settings.resolveGeneratorLocale();
-    if (!mounted || token != _generationToken) {
-      return;
-    }
-    final madness = MadNews(localeOverride: locale);
-    final entry = HeadlineEntry.create(
-      person: madness.getPerson().trim(),
-      action: madness.getAction().trim(),
-      conclusion: madness.getConclusion().trim(),
-      asset: headlineAssets[
-          DateTime.now().millisecondsSinceEpoch % headlineAssets.length],
-    );
-    await widget.settings.addToHistory(entry);
-    if (!mounted || token != _generationToken) {
-      return;
-    }
-    await applyEntry(entry);
-  }
-
-  Future<void> applyEntry(HeadlineEntry entry) async {
-    final liked = await widget.settings.isFavorite(entry.id);
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _currentEntry = entry;
-      _isLiked = liked;
-    });
-  }
-
-  void showEntry(HeadlineEntry entry) {
-    _generationToken++;
-    _ignoreTap = true;
-    setState(() {
-      _currentEntry = entry;
-    });
-    widget.settings.isFavorite(entry.id).then((liked) {
-      if (!mounted || _currentEntry?.id != entry.id) {
-        return;
-      }
-      setState(() => _isLiked = liked);
-    });
-    Future<void>.delayed(const Duration(milliseconds: 800), () {
-      if (mounted) {
-        setState(() => _ignoreTap = false);
-      }
-    });
-  }
-
-  Future<void> toggleLike() async {
-    final entry = _currentEntry;
-    if (entry == null) {
-      return;
-    }
-    if (_isLiked) {
-      await widget.settings.removeFavorite(entry.id);
-    } else {
-      await widget.settings.addFavorite(entry);
-    }
-    if (!mounted) {
-      return;
-    }
-    setState(() => _isLiked = !_isLiked);
-    widget.onFavoritesChanged();
-  }
-
-  void onFavoriteRemovedExternally(String id) {
-    if (_currentEntry?.id == id && _isLiked) {
-      setState(() => _isLiked = false);
-    }
-  }
-
-  Future<void> reloadLocale() async {
-    final locale = await widget.settings.resolveGeneratorLocale();
-    final madness = MadNews(localeOverride: locale);
-    final entry = _currentEntry;
-    if (entry == null) {
-      return;
-    }
-    final updated = HeadlineEntry(
-      id: entry.id,
-      person: madness.getPerson().trim(),
-      action: madness.getAction().trim(),
-      conclusion: madness.getConclusion().trim(),
-      asset: entry.asset,
-      createdAt: entry.createdAt,
-    );
-    await applyEntry(updated);
-  }
 
   Future<void> shareHeadline() async {
     if (_sharing) {
@@ -200,10 +89,6 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _headlineText(String text, {EdgeInsetsGeometry? padding}) {
-    final entry = _currentEntry;
-    if (entry == null) {
-      return const SizedBox.shrink();
-    }
     return Padding(
       padding:
           padding ?? const EdgeInsets.only(bottom: 10, left: 20, right: 20),
@@ -222,14 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final entry = _currentEntry;
-    if (entry == null) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
+    final entry = widget.entry;
     final width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
@@ -239,7 +117,7 @@ class HomeScreenState extends State<HomeScreen> {
           RepaintBoundary(
             key: _captureKey,
             child: GestureDetector(
-              onTap: _ignoreTap ? null : generateNew,
+              onTap: widget.blockGenerate ? null : widget.onGenerateNew,
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
@@ -304,11 +182,15 @@ class HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          tooltip: _isLiked ? 'Unlike' : 'Like',
-                          onPressed: toggleLike,
+                          tooltip: widget.isLiked ? 'Unlike' : 'Like',
+                          onPressed: widget.onToggleLike,
                           icon: Icon(
-                            _isLiked ? Icons.favorite : Icons.favorite_border,
-                            color: _isLiked ? Colors.redAccent : Colors.white,
+                            widget.isLiked
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: widget.isLiked
+                                ? Colors.redAccent
+                                : Colors.white,
                             size: 28,
                           ),
                         ),

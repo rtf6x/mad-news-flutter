@@ -15,7 +15,7 @@ class SidePanelScreen extends StatefulWidget {
   });
 
   final SettingsService settings;
-  final ValueChanged<HeadlineEntry> onSelectEntry;
+  final Future<void> Function(HeadlineEntry entry) onSelectEntry;
   final VoidCallback onLocaleChanged;
 
   @override
