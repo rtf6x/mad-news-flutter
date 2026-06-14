@@ -25,6 +25,12 @@ Requires **Xcode 26+** (iOS 26 SDK) on macOS and an Apple Developer account with
 - Apple Distribution certificate
 - App Store provisioning profile for that App ID
 
+After editing templates in `lib/src/generator_data.dart`, sync JSON:
+
+```bash
+dart run tool/export_generator_json.dart
+```
+
 Open `ios/Runner.xcworkspace` in Xcode, select your Team under **Signing & Capabilities**, then:
 
 ```bash

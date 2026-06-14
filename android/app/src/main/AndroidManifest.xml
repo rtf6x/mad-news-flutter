@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:label="MadNews" android:icon="@mipmap/ic_launcher">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+    <application
+        android:label="MadNews"
+        android:icon="@mipmap/ic_launcher"
+        android:localeConfig="@xml/locales_config">
         <activity android:name="io.flutter.embedding.android.FlutterActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Black.NoTitleBar"

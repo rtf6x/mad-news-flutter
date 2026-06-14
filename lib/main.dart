@@ -1,135 +1,136 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+
 import 'src/generator.dart';
+import 'src/screens/favorites_screen.dart';
+import 'src/screens/home_screen.dart';
+import 'src/screens/side_panel_screen.dart';
+import 'src/services/settings_service.dart';
 
-void main() {
-  runApp(_App());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GeneratorData.load();
+  final settings = await SettingsService.create();
+  runApp(MadNewsApp(settings: settings));
 }
 
-class _App extends StatefulWidget{
+class MadNewsApp extends StatefulWidget {
+  const MadNewsApp({super.key, required this.settings});
+
+  final SettingsService settings;
+
   @override
-  _AppState createState() => _AppState();
+  State<MadNewsApp> createState() => _MadNewsAppState();
 }
 
-class _AppState extends State<_App> {
-  String person = '';
-  String action = '';
-  String conclusion = '';
-  String asset = 'assets/bg.jpg';
-  List assets = [
-    'assets/bg.jpg',
-    'assets/bg2.jpg',
-    'assets/bg3.jpg',
-    'assets/bg4.jpg',
-    'assets/bg5.jpg',
-    'assets/bg6.jpg',
-  ];
+class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
+  static const _homePageIndex = 1;
+
+  final PageController _pageController = PageController(initialPage: _homePageIndex);
+  final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
+  final GlobalKey<FavoritesScreenState> _favoritesKey =
+      GlobalKey<FavoritesScreenState>();
+  final GlobalKey<SidePanelScreenState> _sidePanelKey =
+      GlobalKey<SidePanelScreenState>();
 
   @override
   void initState() {
     super.initState();
-    reloadMadness();
-  }
-
-  void reloadMadness() {
-    var madness = MadNews();
-    person = madness.getPerson().trim();
-    action = madness.getAction().trim();
-    conclusion = madness.getConclusion().trim();
-    asset = assets[Random().nextInt(assets.length)];
-    setState(() {});
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _pageController.dispose();
     super.dispose();
-    reloadMadness();
   }
 
-  Widget madContent(double width) {
-    return SizedBox(
-        width: width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
-              child: Text(
-                person,
-                softWrap: true,
-                overflow: TextOverflow.visible,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  backgroundColor: Colors.black87,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: Text(
-                  action,
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    backgroundColor: Colors.black87,
-                  )
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: Text(
-                conclusion,
-                softWrap: true,
-                overflow: TextOverflow.visible,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  backgroundColor: Colors.black87,
-                ),
-              ),
-            ),
-          ],
-        ));
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _sidePanelKey.currentState?.refresh();
+      _favoritesKey.currentState?.refresh();
+      _homeKey.currentState?.reloadLocale();
+    }
+  }
+
+  void _openFavorites() {
+    _favoritesKey.currentState?.refresh();
+    _pageController.animateToPage(
+      0,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _openSidePanel() {
+    _sidePanelKey.currentState?.refresh();
+    _pageController.animateToPage(
+      2,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _openHome() {
+    _pageController.animateToPage(
+      _homePageIndex,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _onFavoritesChanged() {
+    _favoritesKey.currentState?.refresh();
+  }
+
+  Future<void> _onFavoriteDeleted(String id) async {
+    await widget.settings.removeFavorite(id);
+    _homeKey.currentState?.onFavoriteRemovedExternally(id);
+    await _favoritesKey.currentState?.refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
     return MaterialApp(
       title: 'MadNews',
-      color: Colors.transparent,
-      home: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: GestureDetector(
-          onTap: () {
-            reloadMadness();
-          },
-          child: Container(
-            constraints: BoxConstraints.expand(),
-            height: height,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              image: DecorationImage(
-                image: AssetImage(asset),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: FittedBox(
-              fit: BoxFit.fitWidth,
-              alignment: Alignment.center,
-              child: madContent(width),
-            ),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      home: PageView(
+        controller: _pageController,
+        physics: const BouncingScrollPhysics(),
+        children: [
+          FavoritesScreen(
+            key: _favoritesKey,
+            settings: widget.settings,
+            onSelectEntry: (entry) {
+              _homeKey.currentState?.applyEntry(entry);
+              _openHome();
+            },
+            onDelete: _onFavoriteDeleted,
           ),
-        ),
-      )
+          HomeScreen(
+            key: _homeKey,
+            settings: widget.settings,
+            onOpenFavorites: _openFavorites,
+            onOpenSidePanel: _openSidePanel,
+            onFavoritesChanged: _onFavoritesChanged,
+          ),
+          SidePanelScreen(
+            key: _sidePanelKey,
+            settings: widget.settings,
+            onSelectEntry: (entry) {
+              _homeKey.currentState?.applyEntry(entry);
+              _openHome();
+            },
+            onLocaleChanged: () {
+              _homeKey.currentState?.reloadLocale();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
