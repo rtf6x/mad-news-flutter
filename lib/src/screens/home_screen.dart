@@ -150,37 +150,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.center,
                   child: SizedBox(
                     width: width,
-                    child: Row(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _headlineText(
-                                entry.person,
-                                padding: const EdgeInsets.only(
-                                  top: 40,
-                                  bottom: 10,
-                                  left: 20,
-                                  right: 20,
-                                ),
-                              ),
-                              _headlineText(entry.action),
-                              _headlineText(
-                                entry.conclusion,
-                                padding: const EdgeInsets.only(
-                                  bottom: 20,
-                                  left: 20,
-                                  right: 20,
-                                ),
-                              ),
-                            ],
+                        _headlineText(
+                          entry.person,
+                          padding: const EdgeInsets.only(
+                            top: 40,
+                            bottom: 10,
+                            left: 20,
+                            right: 20,
+                          ),
+                        ),
+                        _headlineText(entry.action),
+                        _headlineText(
+                          entry.conclusion,
+                          padding: const EdgeInsets.only(
+                            bottom: 10,
+                            left: 20,
+                            right: 20,
                           ),
                         ),
                         IgnorePointer(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 40, right: 12),
+                            padding: const EdgeInsets.only(
+                              left: 20,
+                              bottom: 20,
+                            ),
                             child: _refreshHint(),
                           ),
                         ),
