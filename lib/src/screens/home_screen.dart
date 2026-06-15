@@ -88,6 +88,23 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Widget _refreshHint() {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Colors.black87,
+        shape: BoxShape.circle,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Icon(
+          Icons.refresh,
+          color: widget.blockGenerate ? Colors.white38 : Colors.white,
+          size: 28,
+        ),
+      ),
+    );
+  }
+
   Widget _headlineText(String text, {EdgeInsetsGeometry? padding}) {
     return Padding(
       padding:
@@ -133,25 +150,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.center,
                   child: SizedBox(
                     width: width,
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _headlineText(
-                          entry.person,
-                          padding: const EdgeInsets.only(
-                            top: 40,
-                            bottom: 10,
-                            left: 20,
-                            right: 20,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _headlineText(
+                                entry.person,
+                                padding: const EdgeInsets.only(
+                                  top: 40,
+                                  bottom: 10,
+                                  left: 20,
+                                  right: 20,
+                                ),
+                              ),
+                              _headlineText(entry.action),
+                              _headlineText(
+                                entry.conclusion,
+                                padding: const EdgeInsets.only(
+                                  bottom: 20,
+                                  left: 20,
+                                  right: 20,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        _headlineText(entry.action),
-                        _headlineText(
-                          entry.conclusion,
-                          padding: const EdgeInsets.only(
-                            bottom: 20,
-                            left: 20,
-                            right: 20,
+                        IgnorePointer(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40, right: 12),
+                            child: _refreshHint(),
                           ),
                         ),
                       ],

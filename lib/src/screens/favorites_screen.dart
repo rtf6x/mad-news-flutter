@@ -55,7 +55,8 @@ class FavoritesScreenState extends State<FavoritesScreen> {
         children: [
           if (_favorites.isEmpty)
             const Text(
-              'No liked headlines yet. Tap the heart on the main screen.',
+              'Liked headlines will appear here when you add them '
+              'with the heart on the main screen.',
               style: TextStyle(color: Colors.white60),
             )
           else
