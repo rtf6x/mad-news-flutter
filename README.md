@@ -31,6 +31,21 @@ After editing templates in `lib/src/generator_data.dart`, sync JSON:
 dart run tool/export_generator_json.dart
 ```
 
+Preview random headlines in the terminal (uses the same JSON as the app):
+
+```bash
+flutter test test/preview_headlines_test.dart --plain-name preview
+LOCALE=ru COUNT=20 flutter test test/preview_headlines_test.dart --plain-name preview
+```
+
+Run the app on a device or simulator:
+
+```bash
+flutter run
+```
+
+On Android you can switch RU/EN in the in-app side panel; on iOS the generator follows system language.
+
 Open `ios/Runner.xcworkspace` in Xcode, select your Team under **Signing & Capabilities**, then:
 
 ```bash
