@@ -13,7 +13,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Prepare workspace
-        run: mkdir -p "${{ runner.temp }}/ws"
+        run: mkdir -p ws
 
       - name: Checkout game
         uses: actions/checkout@v5
@@ -34,7 +34,7 @@ jobs:
           cache: true
 
       - name: Build iOS simulator app
-        working-directory: ${{ runner.temp }}/ws/${{ github.event.repository.name }}
+        working-directory: ws/${{ github.event.repository.name }}
         run: |
           flutter pub get
           flutter build ios --simulator
@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ios-simulator-build
-          path: ${{ runner.temp }}/ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
+          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
           retention-days: 1
 
   capture:
@@ -63,7 +63,7 @@ jobs:
             locale: ru
     steps:
       - name: Prepare workspace
-        run: mkdir -p "${{ runner.temp }}/ws"
+        run: mkdir -p ws
 
       - name: Checkout game
         uses: actions/checkout@v5
@@ -84,20 +84,20 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        working-directory: ${{ runner.temp }}/ws/${{ github.event.repository.name }}
+        working-directory: ws/${{ github.event.repository.name }}
         run: flutter pub get
 
       - name: Download simulator build
         uses: actions/download-artifact@v6
         with:
           name: ios-simulator-build
-          path: ${{ runner.temp }}/ws/${{ github.event.repository.name }}/build/ios/iphonesimulator
+          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator
 
       - name: Install ffmpeg
         run: brew list ffmpeg &>/dev/null || brew install ffmpeg
 
       - name: Capture screenshots
-        working-directory: ${{ runner.temp }}/ws/${{ github.event.repository.name }}
+        working-directory: ws/${{ github.event.repository.name }}
         env:
           SCREENSHOT_OUT_DIR: screenshots
         run: |
@@ -108,6 +108,6 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: screenshots-${{ env.GAME_SLUG }}-${{ matrix.device }}-${{ matrix.locale }}
-          path: ${{ runner.temp }}/ws/${{ github.event.repository.name }}/screenshots/
+          path: ws/${{ github.event.repository.name }}/screenshots/
           retention-days: 30
           if-no-files-found: error
