@@ -38,6 +38,7 @@ jobs:
         run: |
           flutter pub get
           flutter build ios --simulator
+          test -d build/ios/iphonesimulator/Runner.app
 
       - name: Upload simulator build
         uses: actions/upload-artifact@v6
@@ -45,6 +46,7 @@ jobs:
           name: ios-simulator-build
           path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
           retention-days: 1
+          if-no-files-found: error
 
   capture:
     needs: prepare
@@ -91,7 +93,10 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: ios-simulator-build
-          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator
+          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
+
+      - name: Verify simulator build
+        run: test -x ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app/Runner
 
       - name: Install ffmpeg
         run: brew list ffmpeg &>/dev/null || brew install ffmpeg
