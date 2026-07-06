@@ -95,8 +95,11 @@ jobs:
           name: ios-simulator-build
           path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
 
-      - name: Verify simulator build
-        run: test -x ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app/Runner
+      - name: Restore simulator build permissions
+        run: |
+          APP="ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app"
+          test -f "$APP/Runner"
+          chmod +x "$APP/Runner" "$APP"/*.dylib 2>/dev/null || true
 
       - name: Install ffmpeg
         run: brew list ffmpeg &>/dev/null || brew install ffmpeg
