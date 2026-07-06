@@ -95,21 +95,17 @@ class SettingsService {
   }
 
   Future<String> resolveGeneratorLocale() async {
-    if (Platform.isAndroid) {
-      final override = getAndroidLocaleOverride();
-      if (override != null) {
-        return override;
-      }
+    final override = getAndroidLocaleOverride();
+    if (override != null) {
+      return override;
     }
     return _localeFromSystem();
   }
 
   String currentDisplayLocale() {
-    if (Platform.isAndroid) {
-      final override = getAndroidLocaleOverride();
-      if (override != null) {
-        return override;
-      }
+    final override = getAndroidLocaleOverride();
+    if (override != null) {
+      return override;
     }
     return _localeFromSystem();
   }
