@@ -9,47 +9,7 @@ env:
   GAME_SLUG: mad-news
 
 jobs:
-  prepare:
-    runs-on: macos-26
-    steps:
-      - name: Prepare workspace
-        run: mkdir -p ws
-
-      - name: Checkout game
-        uses: actions/checkout@v5
-        with:
-          path: ws/${{ github.event.repository.name }}
-
-      - name: Checkout screenshot_runner
-        uses: actions/checkout@v5
-        with:
-          repository: rtf6x/flutter-screenshot-runner
-          path: ws/screenshot_runner
-          token: ${{ secrets.SCREENSHOT_RUNNER_PAT }}
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-
-      - name: Build iOS simulator app
-        working-directory: ws/${{ github.event.repository.name }}
-        run: |
-          flutter pub get
-          flutter build ios --simulator
-          test -d build/ios/iphonesimulator/Runner.app
-
-      - name: Upload simulator build
-        uses: actions/upload-artifact@v6
-        with:
-          name: ios-simulator-build
-          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
-          retention-days: 1
-          if-no-files-found: error
-
   capture:
-    needs: prepare
     runs-on: macos-26
     strategy:
       fail-fast: false
@@ -88,18 +48,6 @@ jobs:
       - name: Install dependencies
         working-directory: ws/${{ github.event.repository.name }}
         run: flutter pub get
-
-      - name: Download simulator build
-        uses: actions/download-artifact@v6
-        with:
-          name: ios-simulator-build
-          path: ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app
-
-      - name: Restore simulator build permissions
-        run: |
-          APP="ws/${{ github.event.repository.name }}/build/ios/iphonesimulator/Runner.app"
-          test -f "$APP/Runner"
-          chmod +x "$APP/Runner" "$APP"/*.dylib 2>/dev/null || true
 
       - name: Install ffmpeg
         run: brew list ffmpeg &>/dev/null || brew install ffmpeg
