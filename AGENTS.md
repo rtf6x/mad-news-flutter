@@ -35,7 +35,6 @@
 | `lib/src/screens/side_panel_screen.dart` | История, язык |
 | `lib/src/services/settings_service.dart` | История, избранное, locale |
 | `integration_test/screenshots_test.dart` | Скриншоты для сторов |
-| `test_driver/screenshots_test.dart` | Драйвер `flutter drive` |
 
 ---
 
@@ -54,10 +53,9 @@ flutter analyze
 flutter test integration_test/ -d D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01
 ```
 
-После **изменения экранов** (верстка, навигация, тексты, настройки) — сборка на оба симулятора, затем скриншоты:
+После **изменения экранов** (верстка, навигация, тексты, настройки) — скриншоты:
 
 ```bash
-~/Projects/rtf6x/screenshot_runner/preflight_build.sh
 ~/Projects/rtf6x/screenshot_runner/capture_all.sh
 ```
 
