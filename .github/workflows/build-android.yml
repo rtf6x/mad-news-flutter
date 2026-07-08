@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  VERSION_PREFIX: "2.2"
+  VERSION_PREFIX: "2.3"
 
 jobs:
   build:
