@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../i18n.dart';
 import '../models/headline_entry.dart';
 import '../services/screenshot_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
+    required this.locale,
     required this.entry,
     required this.isLiked,
     required this.blockGenerate,
@@ -15,6 +17,7 @@ class HomeScreen extends StatefulWidget {
     required this.onOpenSidePanel,
   });
 
+  final String locale;
   final HeadlineEntry entry;
   final bool isLiked;
   final bool blockGenerate;
@@ -35,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_sharing) {
       return;
     }
+    final locale = widget.locale;
     setState(() => _sharing = true);
     try {
       final bytes = await ScreenshotService.capturePng(_captureKey);
@@ -50,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.share),
-                  title: const Text('Share image'),
+                  title: Text(tr(locale, 'shareImage')),
                   onTap: () async {
                     Navigator.pop(sheetContext);
                     final box = context.findRenderObject() as RenderBox?;
@@ -65,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.save_alt),
-                  title: const Text('Save to Photos'),
+                  title: Text(tr(locale, 'saveToPhotos')),
                   onTap: () async {
                     Navigator.pop(sheetContext);
                     await ScreenshotService.savePngToGallery(bytes);
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Saved to Photos')),
+                        SnackBar(content: Text(tr(locale, 'savedToPhotos'))),
                       );
                     }
                   },
@@ -125,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final entry = widget.entry;
+    final locale = widget.locale;
     final width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
@@ -196,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      tooltip: 'Liked headlines',
+                      tooltip: tr(locale, 'tooltip.likedHeadlines'),
                       onPressed: widget.onOpenFavorites,
                       icon: const Icon(
                         Icons.chevron_left,
@@ -208,7 +213,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          tooltip: widget.isLiked ? 'Unlike' : 'Like',
+                          tooltip: widget.isLiked
+                              ? tr(locale, 'tooltip.unlike')
+                              : tr(locale, 'tooltip.like'),
                           onPressed: widget.onToggleLike,
                           icon: Icon(
                             widget.isLiked
@@ -221,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         IconButton(
-                          tooltip: 'Share',
+                          tooltip: tr(locale, 'tooltip.share'),
                           onPressed: _sharing ? null : shareHeadline,
                           icon: Icon(
                             _sharing ? Icons.hourglass_top : Icons.share,
@@ -232,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     IconButton(
-                      tooltip: 'History & settings',
+                      tooltip: tr(locale, 'tooltip.historySettings'),
                       onPressed: widget.onOpenSidePanel,
                       icon: const Icon(
                         Icons.chevron_right,

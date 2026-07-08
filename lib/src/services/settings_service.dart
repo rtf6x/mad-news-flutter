@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../i18n.dart';
 import '../models/headline_entry.dart';
 
 class SettingsService {
@@ -95,14 +96,14 @@ class SettingsService {
   }
 
   Future<String> resolveGeneratorLocale() async {
-    final override = getAndroidLocaleOverride();
-    if (override != null) {
-      return override;
-    }
-    return _localeFromSystem();
+    return resolveLocale(await _resolveLocaleCode());
   }
 
   String currentDisplayLocale() {
+    return resolveLocale(_resolveLocaleCodeSync());
+  }
+
+  Future<String> _resolveLocaleCode() async {
     final override = getAndroidLocaleOverride();
     if (override != null) {
       return override;
@@ -110,11 +111,22 @@ class SettingsService {
     return _localeFromSystem();
   }
 
-  static String _localeFromSystem() {
-    final code = Platform.localeName.substring(0, 2).toLowerCase();
+  String _resolveLocaleCodeSync() {
+    final override = getAndroidLocaleOverride();
+    if (override != null) {
+      return override;
+    }
+    return _localeFromSystem();
+  }
+
+  static String localeFromSystem({Locale? locale}) {
+    final code = (locale ?? PlatformDispatcher.instance.locale).languageCode
+        .toLowerCase();
     if (code == 'ru' || code == 'be' || code == 'uk') {
       return 'ru';
     }
     return 'en';
   }
+
+  static String _localeFromSystem() => localeFromSystem();
 }

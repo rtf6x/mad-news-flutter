@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../i18n.dart';
 import '../models/headline_entry.dart';
 import '../services/settings_service.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({
     super.key,
+    required this.locale,
     required this.settings,
     required this.onSelectEntry,
     required this.onDelete,
   });
 
+  final String locale;
   final SettingsService settings;
   final Future<void> Function(HeadlineEntry entry) onSelectEntry;
   final Future<void> Function(String id) onDelete;
@@ -42,22 +45,23 @@ class FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = widget.locale;
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         backgroundColor: const Color(0xFF121212),
         foregroundColor: Colors.white,
-        title: const Text('Liked'),
+        title: Text(tr(locale, 'liked')),
         automaticallyImplyLeading: false,
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
         children: [
           if (_favorites.isEmpty)
-            const Text(
-              'Liked headlines will appear here when you add them '
-              'with the heart on the main screen.',
-              style: TextStyle(color: Colors.white60),
+            Text(
+              tr(locale, 'likedEmpty'),
+              style: const TextStyle(color: Colors.white60),
             )
           else
             ..._favorites.map(
@@ -72,7 +76,7 @@ class FavoritesScreenState extends State<FavoritesScreen> {
                     style: const TextStyle(color: Colors.white, fontSize: 14),
                   ),
                   trailing: IconButton(
-                    tooltip: 'Remove',
+                    tooltip: tr(locale, 'remove'),
                     icon: const Icon(Icons.delete_outline, color: Colors.white54),
                     onPressed: () => _delete(entry.id),
                   ),

@@ -3,17 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../i18n.dart';
 import '../models/headline_entry.dart';
 import '../services/settings_service.dart';
 
 class SidePanelScreen extends StatefulWidget {
   const SidePanelScreen({
     super.key,
+    required this.locale,
     required this.settings,
     required this.onSelectEntry,
     required this.onLocaleChanged,
   });
 
+  final String locale;
   final SettingsService settings;
   final Future<void> Function(HeadlineEntry entry) onSelectEntry;
   final VoidCallback onLocaleChanged;
@@ -24,17 +27,14 @@ class SidePanelScreen extends StatefulWidget {
 
 class SidePanelScreenState extends State<SidePanelScreen> {
   List<HeadlineEntry> _history = [];
-  late String _displayLocale;
 
   @override
   void initState() {
     super.initState();
-    _displayLocale = widget.settings.currentDisplayLocale();
     _loadHistory();
   }
 
   Future<void> refresh() async {
-    _displayLocale = widget.settings.currentDisplayLocale();
     await _loadHistory();
   }
 
@@ -47,7 +47,6 @@ class SidePanelScreenState extends State<SidePanelScreen> {
 
   Future<void> _setAndroidLocale(String code) async {
     await widget.settings.setAndroidLocaleOverride(code);
-    setState(() => _displayLocale = code);
     widget.onLocaleChanged();
   }
 
@@ -56,7 +55,7 @@ class SidePanelScreenState extends State<SidePanelScreen> {
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open Settings')),
+          SnackBar(content: Text(tr(widget.locale, 'couldNotOpenSettings'))),
         );
       }
     }
@@ -64,26 +63,34 @@ class SidePanelScreenState extends State<SidePanelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = widget.locale;
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         backgroundColor: const Color(0xFF121212),
         foregroundColor: Colors.white,
-        title: const Text('MadNews'),
+        title: Text(tr(locale, 'app.title')),
         automaticallyImplyLeading: false,
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
         children: [
-          _sectionTitle('Language'),
+          _sectionTitle(tr(locale, 'language')),
           const SizedBox(height: 8),
           if (Platform.isAndroid) ...[
             SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'ru', label: Text('Русский')),
-                ButtonSegment(value: 'en', label: Text('English')),
+              segments: [
+                ButtonSegment(
+                  value: 'ru',
+                  label: Text(tr(locale, 'language.ru')),
+                ),
+                ButtonSegment(
+                  value: 'en',
+                  label: Text(tr(locale, 'language.en')),
+                ),
               ],
-              selected: {_displayLocale},
+              selected: {locale},
               onSelectionChanged: (selection) {
                 _setAndroidLocale(selection.first);
               },
@@ -92,26 +99,28 @@ class SidePanelScreenState extends State<SidePanelScreen> {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                _displayLocale == 'ru' ? 'Русский' : 'English',
+                locale == 'ru'
+                    ? tr(locale, 'language.ru')
+                    : tr(locale, 'language.en'),
                 style: const TextStyle(color: Colors.white),
               ),
-              subtitle: const Text(
-                'Change in iOS Settings → MadNews → Language',
-                style: TextStyle(color: Colors.white60),
+              subtitle: Text(
+                tr(locale, 'language.iosHint'),
+                style: const TextStyle(color: Colors.white60),
               ),
               trailing: TextButton(
                 onPressed: _openIosSettings,
-                child: const Text('Open Settings'),
+                child: Text(tr(locale, 'openSettings')),
               ),
             ),
           ],
           const SizedBox(height: 28),
-          _sectionTitle('Recent headlines'),
+          _sectionTitle(tr(locale, 'recentHeadlines')),
           const SizedBox(height: 8),
           if (_history.isEmpty)
-            const Text(
-              'No headlines yet. Tap the main screen to generate one.',
-              style: TextStyle(color: Colors.white60),
+            Text(
+              tr(locale, 'noHeadlinesYet'),
+              style: const TextStyle(color: Colors.white60),
             )
           else
             ..._history.map(

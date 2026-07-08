@@ -37,11 +37,13 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
   HeadlineEntry? _activeEntry;
   bool _isLiked = false;
   bool _blockGenerate = false;
+  late String _locale;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _locale = widget.settings.currentDisplayLocale();
     _generateInitialEntry();
   }
 
@@ -55,6 +57,11 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      final locale = widget.settings.currentDisplayLocale();
+      if (locale != _locale) {
+        setState(() => _locale = locale);
+        _generateNew();
+      }
       _sidePanelKey.currentState?.refresh();
       _favoritesKey.currentState?.refresh();
     }
@@ -124,6 +131,7 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
   }
 
   Future<void> _onLocaleChanged() async {
+    setState(() => _locale = widget.settings.currentDisplayLocale());
     await _generateNew();
   }
 
@@ -159,6 +167,7 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
 
     return MaterialApp(
       title: 'MadNews',
+      locale: Locale(_locale),
       theme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
@@ -174,11 +183,13 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
               children: [
                 FavoritesScreen(
                   key: _favoritesKey,
+                  locale: _locale,
                   settings: widget.settings,
                   onSelectEntry: _showEntry,
                   onDelete: _onFavoriteDeleted,
                 ),
                 HomeScreen(
+                  locale: _locale,
                   entry: entry,
                   isLiked: _isLiked,
                   blockGenerate: _blockGenerate,
@@ -189,6 +200,7 @@ class _MadNewsAppState extends State<MadNewsApp> with WidgetsBindingObserver {
                 ),
                 SidePanelScreen(
                   key: _sidePanelKey,
+                  locale: _locale,
                   settings: widget.settings,
                   onSelectEntry: _showEntry,
                   onLocaleChanged: _onLocaleChanged,
