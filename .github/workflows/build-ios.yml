@@ -15,6 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Checkout screenshot_runner
+        run: git clone --depth 1 https://github.com/rtf6x/flutter-screenshot-runner.git ../screenshot_runner
+
       - name: Verify Xcode and iOS SDK
         run: |
           xcodebuild -version
