@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  BUILD_NAME: "2.2.4"
+  VERSION_PREFIX: "2.2"
 
 jobs:
   build:
@@ -15,8 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Set build number
-        run: echo "BUILD_NUMBER=$((49 + ${{ github.run_number }}))" >> "$GITHUB_ENV"
+      - name: Set version
+        run: |
+          BUILD_NUMBER=$((0 + ${{ github.run_number }}))
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_ENV"
+          echo "BUILD_NAME=${{ env.VERSION_PREFIX }}.$BUILD_NUMBER" >> "$GITHUB_ENV"
 
       # Secrets: Settings → Secrets and variables → Actions → Repository secrets
       - name: Set up Android signing
