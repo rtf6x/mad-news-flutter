@@ -21,7 +21,6 @@
 | **Team ID (Apple)** | `Q4KD7AC52U` |
 | **Веб-оригинал** | https://rootfox.cc/games/mad-news/ |
 | **Стек** | Flutter 3.7+, Dart, `shared_preferences`, `share_plus`, `url_launcher` |
-| **Скриншоты (`<game>`)** | `mad-news` |
 
 ---
 
@@ -34,7 +33,6 @@
 | `lib/src/screens/favorites_screen.dart` | Избранные заголовки |
 | `lib/src/screens/side_panel_screen.dart` | История, язык |
 | `lib/src/services/settings_service.dart` | История, избранное, locale |
-| `integration_test/screenshots_test.dart` | Скриншоты для сторов |
 
 ---
 
@@ -42,7 +40,7 @@
 
 После **любого** завершённого изменения — **проактивно**, без отдельной просьбы пользователя:
 
-1. Проверки по типу изменения (см. раздел «Проверки и скриншоты» ниже).
+1. Проверки по типу изменения (см. раздел «Проверки» ниже).
 2. **Коммит** — если есть незакоммиченные изменения (сообщение на английском).
 3. **Пуш** — `git push` в текущую ветку.
 4. **Перезапуск** на симуляторах **iPhone 17** и **iPad Pro 11-inch (M5)** (оба):
@@ -61,7 +59,7 @@
 
 ---
 
-## Проверки и скриншоты
+## Проверки
 
 После **любого изменения логики**:
 
@@ -70,25 +68,6 @@ flutter test
 flutter analyze
 ```
 
-Интеграционные тесты — на симуляторе **iPhone 17** (`D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01`):
-
-```bash
-flutter test integration_test/ -d D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01
-```
-
-После **изменения экранов** (верстка, навигация, тексты, настройки) — скриншоты:
-
-```bash
-~/Projects/rtf6x/screenshot_runner/capture_all.sh
-```
-
-Подробности: [`../screenshot_runner/README.md`](../screenshot_runner/README.md).
-
-**Экраны этого проекта:** `home`, `favorites`, `settings` · **языки:** `en`, `ru`.
-
-Путь: `~/Downloads/screens/mad-news/[resolution]/[locale]-[screen].png`  
-Симуляторы: iPhone 17, iPad Pro 11-inch (M5).  
-Разрешения: `1242x2688`, `2688x1242`, `1668x2420`, `2420x1668`.
 
 ---
 
