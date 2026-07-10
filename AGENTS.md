@@ -43,11 +43,13 @@
 1. Проверки по типу изменения (см. раздел «Проверки» ниже).
 2. **Коммит** — если есть незакоммиченные изменения (сообщение на английском).
 3. **Пуш** — `git push` в текущую ветку.
-4. **Перезапуск** на симуляторах **iPhone 17** и **iPad Pro 11-inch (M5)** (оба):
+4. **Установка** свежей debug-сборки на симуляторы **iPhone 17** и **iPad Pro 11-inch (M5)** — только build + install, **без запуска**:
    ```bash
-   pkill -f "flutter_tools.snapshot run" 2>/dev/null; sleep 1
-   flutter run -d D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01 &
-   flutter run -d 66DA3A65-0157-47FF-BCE1-4045575DF829 &
+   flutter build ios --simulator --debug
+   for d in D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01 66DA3A65-0157-47FF-BCE1-4045575DF829; do
+     xcrun simctl boot "$d" 2>/dev/null || true
+     xcrun simctl install "$d" build/ios/iphonesimulator/Runner.app
+   done
    ```
 
    | Симулятор | Device ID |
@@ -55,7 +57,10 @@
    | iPhone 17 | `D6ECC10E-B0B1-4E06-B718-4DE6F1BAAB01` |
    | iPad Pro 11-inch (M5) | `66DA3A65-0157-47FF-BCE1-4045575DF829` |
 
+   **Запрещено:** `flutter run`, держать debug-сессии, открывать Simulator.app ради этого шага, запускать приложение, перезапускать что-либо при `Lost connection` / завершении сессии. Пользователь сам управляет симуляторами.
+
 Не коммитить и не пушить только если пользователь явно попросил или нечего коммитить.
+
 
 ---
 
